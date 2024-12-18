@@ -2,27 +2,30 @@
 
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 
-export default function Marketplace() {
-  const t = useTranslations();
+export default function Mentorship() {
+  const t = useTranslations()
 
-  const products = [
+  const mentors = [
     { 
-      name: { en: 'Handmade Shawl', ur: 'ہاتھ سے بنا شال' }, 
-      price: 2000,
-      image: '/images/handmade-shawl.jpg'
+      name: { en: 'Fatima Ali', ur: 'فاطمہ علی' }, 
+      expertise: { en: 'Business Strategy', ur: 'کاروباری حکمت عملی' },
+      image: '/images/fatima-ali.jpg',
+      bio: { en: 'Experienced business strategist with 10+ years of consulting', ur: 'دس سے زائد سالوں کا تجربہ رکھنے والی کاروباری مشاورت کار' }
     },
     { 
-      name: { en: 'Embroidered Cushion', ur: 'کڑھائی والا کشن' }, 
-      price: 1500,
-      image: '/images/embroidered-cushion.jpg'
+      name: { en: 'Ayesha Khan', ur: 'عائشہ خان' }, 
+      expertise: { en: 'Marketing', ur: 'مارکیٹنگ' },
+      image: '/images/ayesha-khan.jpg',
+      bio: { en: 'Digital marketing expert specializing in growth strategies', ur: 'ترقیاتی مارکیٹنگ میں ماہر' }
     },
     { 
-      name: { en: 'Traditional Jewelry', ur: 'روایتی زیورات' }, 
-      price: 3000,
-      image: '/images/traditional-jewelry.jpg'
+      name: { en: 'Zainab Hassan', ur: 'زینب حسن' }, 
+      expertise: { en: 'Finance', ur: 'فنانس' },
+      image: '/images/zainab-hassan.jpg',
+      bio: { en: 'Financial advisor with expertise in startup funding', ur: 'اسٹارٹ اپ فنڈنگ میں مہارت رکھنے والی مالی مشاور' }
     },
   ]
 
@@ -53,7 +56,7 @@ export default function Marketplace() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {t('marketplace')}
+          {t('mentorship')}
         </motion.h2>
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -61,7 +64,7 @@ export default function Marketplace() {
           initial="hidden"
           animate="visible"
         >
-          {products.map((product, index) => (
+          {mentors.map((mentor, index) => (
             <motion.div 
               key={index} 
               className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl flex flex-col"
@@ -69,22 +72,23 @@ export default function Marketplace() {
             >
               <div className="mb-6 overflow-hidden rounded-xl">
                 <Image 
-                  src={product.image} 
-                  alt={product.name[t('lng')]} 
+                  src={mentor.image} 
+                  alt={mentor.name[t('lng')]} 
                   width={400} 
-                  height={300}
+                  height={400}
                   className="w-full h-64 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
                 />
               </div>
-              <h3 className="text-2xl font-bold mb-4">{product.name[t('lng')]}</h3>
-              <p className="text-xl mb-6">{t('price', { price: product.price })}</p>
-              <Link href="/checkout" className="mt-auto">
+              <h3 className="text-2xl font-bold mb-2">{mentor.name[t('lng')]}</h3>
+              <p className="text-xl mb-4 text-white text-opacity-80">{mentor.expertise[t('lng')]}</p>
+              <p className="text-md mb-6 text-white text-opacity-70">{mentor.bio[t('lng')]}</p>
+              <Link href="/mentorship/request" className="mt-auto">
                 <motion.button 
                   className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {t('buyNow')}
+                  {t('requestMentorship')}
                 </motion.button>
               </Link>
             </motion.div>

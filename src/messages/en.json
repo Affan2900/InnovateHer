@@ -1,8 +1,12 @@
 {
-  "Home":{
-    "description": "This is English"
-  },
   "HeroNavbar":{
-
+    "title": "InnovateHer",
+    "heroSubtitle": "Empowering Rural Women Entrepreneurs Through Ingenious Engineering Solutions",
+    "Call-To-Action-1": "Explore Marketplace",
+    "Call-To-Action-2": "Start Learning",
+    "impactTitle": "Innovate, Empower and Thrive",
+    "impactStat1": "Empowered Over 1,000 Rural Entrepreneurs Globally",
+    "impactStat2": "Simplified E-Commerce Solutions for Low-End Devices",
+    "impactStat3": "Bridging the Gap with Culturally Inclusive Design"
   }
 }

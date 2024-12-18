@@ -4,6 +4,8 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    // Add this line to include the UploadThing components
+    "./node_modules/@uploadthing/react/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
