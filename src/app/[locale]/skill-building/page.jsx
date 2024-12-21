@@ -5,9 +5,17 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BookOpen, Clock, TrendingUp } from 'lucide-react'
+import Navbar from '@/components/Navbar';
+import { usePathname } from 'next/navigation';
 
-export default function SkillBuilding() {
+export default async function SkillBuilding({params}) {
   const t = useTranslations()
+
+  //AS IN NEXT-15 THEY ARE MADE ASYNCHRONUS
+  const { locale } = await params;
+
+  const pathname = usePathname();
+  const isHomePage = pathname === `/${locale}`;
 
   const courses = [
     { 
@@ -62,6 +70,7 @@ export default function SkillBuilding() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white p-8">
+      {!isHomePage && <Navbar />}
       <div className="container mx-auto max-w-4xl space-y-8">
         <motion.h2 
           className="text-5xl font-bold mb-12 text-center"

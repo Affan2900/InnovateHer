@@ -4,9 +4,13 @@ import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
+import NavbarContainer from '@/components/NavbarContainer'
 
-export default function Marketplace() {
+export default async function Marketplace({params}) {
   const t = useTranslations();
+
+  //AS IN NEXT-15 THEY ARE MADE ASYNCHRONUS
+  const { locale } = await params;
 
   const products = [
     { 
@@ -46,6 +50,7 @@ export default function Marketplace() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white p-8">
+      <NavbarContainer params={locale} />
       <div className="container mx-auto max-w-7xl">
         <motion.h2 
           className="text-5xl font-bold mb-12 text-center"

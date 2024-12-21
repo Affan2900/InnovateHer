@@ -2,11 +2,32 @@
   "HeroNavbar":{
     "title": "InnovateHer",
     "heroSubtitle": "Empowering Rural Women Entrepreneurs Through Ingenious Engineering Solutions",
-    "Call-To-Action-1": "Explore Marketplace",
-    "Call-To-Action-2": "Start Learning",
+    "exploreMarketplace": "Explore Marketplace",
+    "startLearning": "Start Learning",
     "impactTitle": "Innovate, Empower and Thrive",
     "impactStat1": "Empowered Over 1,000 Rural Entrepreneurs Globally",
     "impactStat2": "Simplified E-Commerce Solutions for Low-End Devices",
-    "impactStat3": "Bridging the Gap with Culturally Inclusive Design"
+    "impactStat3": "Bridging the Gap with Culturally Inclusive Design",
+    "scrollPrompt":"See Our Mission"
+  },
+  "Home":{
+    "title": "InnovateHer",
+    "missionTitle": "Our Mission",
+    "missionDescription": "Our mission is to empower rural women entrepreneurs by engineering innovative web solutions tailored to their unique needs. Through a strategic selection of technology stacks, culturally sensitive design, and inclusive features, we aim to address challenges like accessibility, multilingual support, and usability for diverse stakeholders. By fostering collaborative teamwork, balancing conflicting requirements, and prioritizing stakeholder needs, we strive to create transformative tools that promote growth, learning, and self-sufficiency in rural communities.",
+    "aboutTitle":"About Us",
+    "aboutDescription": "We are a dedicated team of innovators committed to crafting technology-driven solutions that address real-world challenges. With a focus on empowering rural women entrepreneurs, we specialize in developing culturally adaptive web applications that prioritize accessibility, usability, and inclusivity. Our expertise lies in navigating complex requirements, fostering collaboration among diverse stakeholders, and delivering impactful tools that bridge technological and societal gaps. By blending technical ingenuity with a deep understanding of community needs, we aim to drive sustainable growth and create meaningful opportunities for underrepresented groups."
+    
+  },
+  "Marketplace": "Marketplace",
+  "Skill Building": "Skill Building",
+  "Networking": "Networking",
+  "Mentorship": "Mentorship",
+  "Navbar":{
+    "title":"InnovateHer",
+    "login":"Login",
+    "Marketplace": "Marketplace",
+    "Skill Building": "Skill Building",
+    "Networking": "Networking",
+    "Mentorship": "Mentorship"
   }
 }

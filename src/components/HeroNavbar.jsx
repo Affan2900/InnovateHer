@@ -44,7 +44,7 @@ const HeroNavbar = () => {
       <div className="absolute top-0 left-0 right-0 bg-transparent z-50 p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link href="/">
-            <span className="text-2xl font-bold">{t('title')}</span>
+            <span className="text-3xl font-black">{t('title')}</span>
           </Link>
           <div className="flex items-center space-x-4">
             <LanguageToggle />
