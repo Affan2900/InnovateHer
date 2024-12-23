@@ -4,37 +4,33 @@ import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import Navbar from '@/components/Navbar';
-import { usePathname } from 'next/navigation';
+import FixedNavbar from '@/components/FixedNavbar'
+import LanguageToggle from '@/components/LanguageToggle'
 
-export default async function Mentorship({params}) {
-  const t = useTranslations()
+export default function Mentorship() {
+  const t = useTranslations("Mentorship")
 
-  //AS IN NEXT-15 THEY ARE MADE ASYNCHRONUS
-  const { locale } = await params;
-
-  const pathname = usePathname();
-  const isHomePage = pathname === `/${locale}`;
+  
 
   const mentors = [
     { 
-      name: { en: 'Fatima Ali', ur: 'فاطمہ علی' }, 
-      expertise: { en: 'Business Strategy', ur: 'کاروباری حکمت عملی' },
+      name: 'Fatima Ali', 
+      expertise: 'Business Strategy',
       image: '/images/fatima-ali.jpg',
-      bio: { en: 'Experienced business strategist with 10+ years of consulting', ur: 'دس سے زائد سالوں کا تجربہ رکھنے والی کاروباری مشاورت کار' }
+      bio: 'Experienced business strategist with 10+ years of consulting'
     },
     { 
-      name: { en: 'Ayesha Khan', ur: 'عائشہ خان' }, 
-      expertise: { en: 'Marketing', ur: 'مارکیٹنگ' },
+      name: 'Ayesha Khan', 
+      expertise:'Marketing',
       image: '/images/ayesha-khan.jpg',
-      bio: { en: 'Digital marketing expert specializing in growth strategies', ur: 'ترقیاتی مارکیٹنگ میں ماہر' }
+      bio: 'Digital marketing expert specializing in growth strategies'
     },
     { 
-      name: { en: 'Zainab Hassan', ur: 'زینب حسن' }, 
-      expertise: { en: 'Finance', ur: 'فنانس' },
+      name:'Zainab Hassan', 
+      expertise:'Finance',
       image: '/images/zainab-hassan.jpg',
-      bio: { en: 'Financial advisor with expertise in startup funding', ur: 'اسٹارٹ اپ فنڈنگ میں مہارت رکھنے والی مالی مشاور' }
-    },
+      bio: 'Financial advisor with expertise in startup funding'
+    }
   ]
 
   const containerVariants = {
@@ -56,9 +52,13 @@ export default async function Mentorship({params}) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white p-8">
-      {!isHomePage && <Navbar />}
-      <div className="container mx-auto max-w-7xl">
+    <>
+    <FixedNavbar />
+      <div className="fixed top-28 right-8 z-40">
+        <LanguageToggle />
+      </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+      <div className="container mx-auto max-w-7xl pt-32">
         <motion.h2 
           className="text-5xl font-bold mb-12 text-center"
           initial={{ opacity: 0, y: -50 }}
@@ -82,15 +82,14 @@ export default async function Mentorship({params}) {
               <div className="mb-6 overflow-hidden rounded-xl">
                 <Image 
                   src={mentor.image} 
-                  alt={mentor.name[t('lng')]} 
                   width={400} 
                   height={400}
                   className="w-full h-64 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
                 />
               </div>
-              <h3 className="text-2xl font-bold mb-2">{mentor.name[t('lng')]}</h3>
-              <p className="text-xl mb-4 text-white text-opacity-80">{mentor.expertise[t('lng')]}</p>
-              <p className="text-md mb-6 text-white text-opacity-70">{mentor.bio[t('lng')]}</p>
+              <h3 className="text-2xl font-bold mb-2">{mentor.name}</h3>
+              <p className="text-xl mb-4 text-white text-opacity-80">{mentor.expertise}</p>
+              <p className="text-md mb-6 text-white text-opacity-70">{mentor.bio}</p>
               <Link href="/mentorship/request" className="mt-auto">
                 <motion.button 
                   className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
@@ -105,5 +104,6 @@ export default async function Mentorship({params}) {
         </motion.div>
       </div>
     </div>
+    </>
   )
 }

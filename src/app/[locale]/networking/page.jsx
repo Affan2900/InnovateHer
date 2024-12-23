@@ -4,49 +4,39 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, MapPin, Users } from 'lucide-react'
-import Navbar from '@/components/Navbar';
-import { usePathname } from 'next/navigation';
+import FixedNavbar from '@/components/FixedNavbar'
+import LanguageToggle from '@/components/LanguageToggle'
 
-export default async function Networking({params}) {
-  const t = useTranslations()
+export default function Networking() {
+  const t = useTranslations("Networking")
 
-  //AS IN NEXT-15 THEY ARE MADE ASYNCHRONUS
-  const { locale } = await params;
 
-  const pathname = usePathname();
-  const isHomePage = pathname === `/${locale}`;
+
+
   const events = [
     { 
-      name: { en: 'Women Entrepreneurs Meetup', ur: 'خواتین کاروباری ملاقات' }, 
+      name: 'Women Entrepreneurs Meetup' , 
       date: '2023-07-15',
       image: '/images/entrepreneurs-meetup.jpg',
-      location: { en: 'Lahore Convention Center', ur: 'لاہور کنونشن سینٹر' },
-      description: { 
-        en: 'Connecting and empowering women entrepreneurs across different sectors', 
-        ur: 'مختلف شعبوں میں خواتین کاروباریوں کو جوڑنا اور ان کو طاقت دینا' 
-      },
+      location: 'Lahore Convention Center',
+      description: 
+       'Connecting and empowering women entrepreneurs across different sectors' ,
       participants: 150
     },
     { 
-      name: { en: 'Rural Business Forum', ur: 'دیہی کاروبار فورم' }, 
+      name: 'Rural Business Forum', 
       date: '2023-08-01',
       image: '/images/rural-business-forum.jpg',
-      location: { en: 'Islamabad Tech Park', ur: 'اسلام آباد ٹیک پارک' },
-      description: { 
-        en: 'Exploring growth opportunities in rural entrepreneurship', 
-        ur: 'دیہی کاروباری سرگرمیوں میں ترقیاتی مواقع کی کھوج' 
-      },
+      location:'Islamabad Tech Park',
+      description:'Exploring growth opportunities in rural entrepreneurship',
       participants: 200
     },
     { 
-      name: { en: 'Artisan Networking Event', ur: 'دستکار نیٹ ورکنگ تقریب' }, 
+      name:'Artisan Networking Event', 
       date: '2023-08-20',
       image: '/images/artisan-networking.jpg',
-      location: { en: 'Karachi Art Gallery', ur: 'کراچی آرٹ گیلری' },
-      description: { 
-        en: 'Connecting local artisans and creating collaborative opportunities', 
-        ur: 'مقامی دستکاروں کو جوڑنا اور اشتراکی مواقع بنانا' 
-      },
+      location: 'Karachi Art Gallery',
+      description: 'Connecting local artisans and creating collaborative opportunities',
       participants: 100
     },
   ]
@@ -70,9 +60,14 @@ export default async function Networking({params}) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white p-8">
-      {!isHomePage && <Navbar />}
-      <div className="container mx-auto max-w-4xl space-y-8">
+    <>
+    <FixedNavbar/>
+    <div className="fixed top-28 right-8 z-40">
+            <LanguageToggle />
+          </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+      
+      <div className="container mx-auto max-w-4xl space-y-8 pt-32">
         <motion.h2 
           className="text-5xl font-bold mb-12 text-center"
           initial={{ opacity: 0, y: -50 }}
@@ -94,25 +89,25 @@ export default async function Networking({params}) {
             <div className="md:w-2/3 p-6 flex flex-col justify-between">
               <div>
                 <h3 className="text-3xl font-bold mb-4">
-                  {event.name[t('lng')]}
+                  {event.name}
                 </h3>
                 <p className="text-white text-opacity-80 mb-6">
-                  {event.description[t('lng')]}
+                  {event.description}
                 </p>
               </div>
               
               <div className="space-y-4">
                 <div className="flex items-center text-white text-opacity-80">
                   <Calendar className="mr-3 text-white" size={24} />
-                  <span>{t('date', { date: event.date })}</span>
+                  <span>{t('date')}: { event.date }</span>
                 </div>
                 <div className="flex items-center text-white text-opacity-80">
                   <MapPin className="mr-3 text-white" size={24} />
-                  <span>{event.location[t('lng')]}</span>
+                  <span>{event.location}</span>
                 </div>
                 <div className="flex items-center text-white text-opacity-80">
                   <Users className="mr-3 text-white" size={24} />
-                  <span>{t('participants', { count: event.participants })}</span>
+                  <span>{event.participants}  {t('participants')}</span>
                 </div>
               </div>
               
@@ -129,7 +124,6 @@ export default async function Networking({params}) {
             <div className="md:w-1/3 relative">
               <Image 
                 src={event.image} 
-                alt={event.name[t('lng')]} 
                 width={300} 
                 height={250}
                 className="w-full h-48 md:h-full object-cover"
@@ -139,5 +133,6 @@ export default async function Networking({params}) {
         ))}
       </div>
     </div>
+    </>
   )
 }

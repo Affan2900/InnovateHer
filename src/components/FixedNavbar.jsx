@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const Navbar = ({ isVisible }) => {
+const FixedNavbar = () => {
   const pathname = usePathname();
   const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
   const t = useTranslations("Navbar");
@@ -25,12 +25,7 @@ const Navbar = ({ isVisible }) => {
   }));
 
   return (
-    <motion.nav
-      className="fixed top-0 left-0 right-0 bg-purple-700 bg-opacity-75 backdrop-filter backdrop-blur-xl text-white py-6 px-8 z-50"
-      initial={{ y: -100 }}
-      animate={{ y: isVisible ? 0 : -100 }}
-      transition={{ duration: 0.3 }}
-    >
+    <nav className="fixed top-0 left-0 right-0 bg-purple-700 bg-opacity-75 backdrop-filter backdrop-blur-xl text-white py-6 px-8 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Link href={`/${currentLocale}`}>
           <span className="text-3xl font-bold">{t('title')}</span>
@@ -62,8 +57,8 @@ const Navbar = ({ isVisible }) => {
           </motion.li>
         </ul>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 
-export default Navbar;
+export default FixedNavbar;

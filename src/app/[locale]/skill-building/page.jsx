@@ -5,48 +5,35 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BookOpen, Clock, TrendingUp } from 'lucide-react'
-import Navbar from '@/components/Navbar';
-import { usePathname } from 'next/navigation';
+import FixedNavbar from '@/components/FixedNavbar'
+import LanguageToggle from '@/components/LanguageToggle'
 
-export default async function SkillBuilding({params}) {
-  const t = useTranslations()
+export default function SkillBuilding() {
+  const t = useTranslations("Skill Building")
 
-  //AS IN NEXT-15 THEY ARE MADE ASYNCHRONUS
-  const { locale } = await params;
-
-  const pathname = usePathname();
-  const isHomePage = pathname === `/${locale}`;
+  
 
   const courses = [
     { 
-      name: { en: 'Basic Entrepreneurship', ur: 'بنیادی کاروباری مہارت' },
+      name: 'Basic Entrepreneurship',
       image: '/images/entrepreneurship-course.jpg',
-      description: { 
-        en: 'Learn fundamental business skills and startup strategies', 
-        ur: 'بنیادی کاروباری مہارتیں اور سٹارٹ اپ حکمت عملی سیکھیں' 
-      },
-      duration: { en: '4 Weeks', ur: '4 ہفتے' },
-      difficulty: { en: 'Beginner', ur: 'مبتدی' }
+      description: 'Learn fundamental business skills and startup strategies',
+      duration: '4 Weeks',
+      difficulty: 'Beginner',
     },
     { 
-      name: { en: 'Digital Marketing', ur: 'ڈیجیٹل مارکیٹنگ' },
+      name:'Digital Marketing',
       image: '/images/digital-marketing-course.jpg',
-      description: { 
-        en: 'Master online marketing techniques and social media strategies', 
-        ur: 'آن لائن مارکیٹنگ تکنیکیں اور سوشل میڈیا حکمت عملی سیکھیں' 
-      },
-      duration: { en: '6 Weeks', ur: '6 ہفتے' },
-      difficulty: { en: 'Intermediate', ur: 'درمیانی' }
+      description: 'Master online marketing techniques and social media strategies',
+      duration: '6 Weeks',
+      difficulty: 'Intermediate'
     },
     { 
-      name: { en: 'Financial Management', ur: 'مالی انتظام' },
+      name: 'Financial Management',
       image: '/images/financial-management-course.jpg',
-      description: { 
-        en: 'Develop financial planning and investment skills', 
-        ur: 'مالی منصوبہ بندی اور سرمایہ کاری کی مہارتیں سیکھیں' 
-      },
-      duration: { en: '5 Weeks', ur: '5 ہفتے' },
-      difficulty: { en: 'Advanced', ur: 'پیشرفتہ' }
+      description: 'Develop financial planning and investment skills',
+      duration: '5 Weeks',
+      difficulty:'Advanced',
     },
   ]
 
@@ -69,9 +56,14 @@ export default async function SkillBuilding({params}) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white p-8">
-      {!isHomePage && <Navbar />}
-      <div className="container mx-auto max-w-4xl space-y-8">
+    <>
+    <FixedNavbar />
+    <div className="fixed top-28 right-8 z-40">
+                <LanguageToggle />
+              </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+      
+      <div className="container mx-auto max-w-4xl space-y-8 pt-32">
         <motion.h2 
           className="text-5xl font-bold mb-12 text-center"
           initial={{ opacity: 0, y: -50 }}
@@ -93,21 +85,21 @@ export default async function SkillBuilding({params}) {
             <div className="md:w-2/3 p-6 flex flex-col justify-between">
               <div>
                 <h3 className="text-3xl font-bold mb-4">
-                  {course.name[t('lng')]}
+                  {course.name}
                 </h3>
                 <p className="text-white text-opacity-80 mb-6">
-                  {course.description[t('lng')]}
+                  {course.description}
                 </p>
               </div>
               
               <div className="space-y-4">
                 <div className="flex items-center text-white text-opacity-80">
                   <Clock className="mr-3 text-white" size={24} />
-                  <span>{course.duration[t('lng')]}</span>
+                  <span>{course.duration}</span>
                 </div>
                 <div className="flex items-center text-white text-opacity-80">
                   <TrendingUp className="mr-3 text-white" size={24} />
-                  <span>{course.difficulty[t('lng')]}</span>
+                  <span>{course.difficulty}</span>
                 </div>
                 <div className="flex items-center text-white text-opacity-80">
                   <BookOpen className="mr-3 text-white" size={24} />
@@ -128,7 +120,6 @@ export default async function SkillBuilding({params}) {
             <div className="md:w-1/3 relative">
               <Image 
                 src={course.image} 
-                alt={course.name[t('lng')]} 
                 width={300} 
                 height={250}
                 className="w-full h-48 md:h-full object-cover"
@@ -138,5 +129,6 @@ export default async function SkillBuilding({params}) {
         ))}
       </div>
     </div>
+    </>
   )
 }

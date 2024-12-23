@@ -18,16 +18,43 @@
     "aboutDescription": "We are a dedicated team of innovators committed to crafting technology-driven solutions that address real-world challenges. With a focus on empowering rural women entrepreneurs, we specialize in developing culturally adaptive web applications that prioritize accessibility, usability, and inclusivity. Our expertise lies in navigating complex requirements, fostering collaboration among diverse stakeholders, and delivering impactful tools that bridge technological and societal gaps. By blending technical ingenuity with a deep understanding of community needs, we aim to drive sustainable growth and create meaningful opportunities for underrepresented groups."
     
   },
-  "Marketplace": "Marketplace",
-  "Skill Building": "Skill Building",
-  "Networking": "Networking",
-  "Mentorship": "Mentorship",
+  "Marketplace": {
+    "marketplace": "Marketplace",
+    "buyNow": "Buy Now"
+  },
+  "Skill Building": {
+    "skillBuilding": "Skill Building",
+    "enrollNow": "Enroll Now",
+    "lessons": "Skill Building Lesson"
+  },
+  "Networking": {
+    "networking": "Networking",
+    "register": "Register",
+    "date": "Date",
+    "participants": "Participants"
+  },
+  "Mentorship": {
+    "mentorship": "Mentorship",
+    "requestMentorship": "Request Mentorship"
+  },
   "Navbar":{
     "title":"InnovateHer",
     "login":"Login",
+    "Home": "Home",
     "Marketplace": "Marketplace",
     "Skill Building": "Skill Building",
     "Networking": "Networking",
     "Mentorship": "Mentorship"
+  },
+  "Login": {
+    "name":"Name",
+    "password":"Password",
+    "login":"Sign In",
+    "loginButton":"Login",
+    "registerHere":"Click Here",
+    "noAccount":"Want to Register?"
+  },
+  "Register": {
+
   }
 }
