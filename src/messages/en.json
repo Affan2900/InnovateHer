@@ -55,6 +55,12 @@
     "noAccount":"Want to Register?"
   },
   "Register": {
-
+    "register":"Sign Up",
+    "password":"Password",
+    "name":"Name",
+    "email":"Email",
+    "registerButton":"Register",
+    "loginHere":"Login",
+    "alreadyHaveAccount":"Already Have an Account."
   }
 }

@@ -24,6 +24,9 @@ const FixedNavbar = () => {
     href: `/${currentLocale}${item.path}`,
   }));
 
+  // Check if current pathname includes "login" or "register"
+  const shouldHideLoginButton = pathname.includes('/login') || pathname.includes('/register');
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-purple-700 bg-opacity-75 backdrop-filter backdrop-blur-xl text-white py-6 px-8 z-50">
       <div className="container mx-auto flex justify-between items-center">
@@ -45,16 +48,18 @@ const FixedNavbar = () => {
               </Link>
             </motion.li>
           ))}
-          <motion.li
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link href={`/${currentLocale}/login`}>
-              <button className="bg-white text-purple-700 px-8 py-3 rounded-full text-xl font-bold hover:bg-purple-100 transition-colors">
-                {t('login')}
-              </button>
-            </Link>
-          </motion.li>
+          {!shouldHideLoginButton && (
+            <motion.li
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href={`/${currentLocale}/login`}>
+                <button className="bg-white text-purple-700 px-8 py-3 rounded-full text-xl font-bold hover:bg-purple-100 transition-colors">
+                  {t('login')}
+                </button>
+              </Link>
+            </motion.li>
+          )}
         </ul>
       </div>
     </nav>

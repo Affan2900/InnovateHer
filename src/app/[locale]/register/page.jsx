@@ -4,12 +4,16 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import LanguageToggle from '@/components/LanguageToggle' 
+import FixedNavbar from '@/components/FixedNavbar'
+
 
 
 export default function Register() {
   const t = useTranslations("Register")
+  const pathname = usePathname();
+  const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
@@ -35,7 +39,8 @@ export default function Register() {
 
   return (
     <>
-    <div className="fixed top-24 right-40 z-40">
+    <FixedNavbar/>
+    <div className="fixed top-28 right-8 z-40">
         <LanguageToggle />
       </div>
     <div className="min-h-screen flex items-center justify-center bg-purple-50">
@@ -92,9 +97,9 @@ export default function Register() {
             {t('registerButton')}
           </motion.button>
         </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-medium text-gray-600">
           {t('alreadyHaveAccount')} {' '}
-          <Link href="/login" className="font-medium text-purple-600 hover:text-purple-500">
+          <Link href={`/${currentLocale}/login`} className="font-medium text-purple-600 hover:text-purple-500">
             {t('loginHere')}
           </Link>
         </p>

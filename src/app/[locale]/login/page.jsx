@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import LanguageToggle from '@/components/LanguageToggle' 
+import FixedNavbar from '@/components/FixedNavbar'
+
 
 export default function Login() {
   const t = useTranslations("Login")
@@ -35,7 +37,8 @@ export default function Login() {
 
   return (
     <>
-    <div className="fixed top-24 right-40 z-40">
+    <FixedNavbar/>
+    <div className="fixed top-28 right-8 z-40">
         <LanguageToggle />
       </div>
     <div className="min-h-screen flex items-center justify-center bg-purple-50">
