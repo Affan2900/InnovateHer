@@ -1,14 +1,37 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Profile from '@/components/Profile';
 
 const FixedNavbar = () => {
+  const [user, setUser] = useState(null);
   const pathname = usePathname();
   const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
   const t = useTranslations("Navbar");
+  const pathParts = pathname.split('/');
+  const userId = pathParts.length === 3 ? pathParts[2] : null;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (userId && userId.length === 24) {
+        try {
+          const response = await fetch(`/api/users/${userId}`);
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+        }
+      }
+    };
+ 
+    fetchUser();
+  }, [userId]);
 
   const navItems = [
     { key: 'home', label: t('Home'), path: '/' },
@@ -18,11 +41,13 @@ const FixedNavbar = () => {
     { key: 'mentorship', label: t('Mentorship'), path: '/mentorship' },
   ];
 
-  // Add locale to href dynamically
-  const localizedNavItems = navItems.map((item) => ({
-    ...item,
-    href: `/${currentLocale}${item.path}`,
-  }));
+  // Add locale and user ID to href dynamically
+const localizedNavItems = navItems.map((item) => ({
+  ...item,
+  href: userId
+    ? `/${currentLocale}/${userId}${item.path}` // Include user ID if it exists
+    : `/${currentLocale}${item.path}`,        // Fallback to locale-only paths
+}));
 
   // Check if current pathname includes "login" or "register"
   const shouldHideLoginButton = pathname.includes('/login') || pathname.includes('/register');
@@ -48,17 +73,26 @@ const FixedNavbar = () => {
               </Link>
             </motion.li>
           ))}
-          {!shouldHideLoginButton && (
+          {user && userId ? (
             <motion.li
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href={`/${currentLocale}/login`}>
-                <button className="bg-white text-purple-700 px-8 py-3 rounded-full text-xl font-bold hover:bg-purple-100 transition-colors">
-                  {t('login')}
-                </button>
-              </Link>
+              <Profile username={user.name} onClick={() => {}} />
             </motion.li>
+          ) : (
+            !shouldHideLoginButton && (
+              <motion.li
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link href={`/${currentLocale}/login`}>
+                  <button className="bg-white text-purple-700 px-8 py-3 rounded-full text-xl font-bold hover:bg-purple-100 transition-colors">
+                    {t('login')}
+                  </button>
+                </Link>
+              </motion.li>
+            )
           )}
         </ul>
       </div>

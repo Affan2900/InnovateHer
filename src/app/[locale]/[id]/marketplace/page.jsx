@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 import LanguageToggle from '@/components/LanguageToggle'
 import FixedNavbar from '@/components/FixedNavbar'
 
-export default function Marketplace() {
+export default function Marketplace({userId}) {
   const t = useTranslations("Marketplace");
   const pathname = usePathname();
   const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
@@ -51,7 +51,7 @@ export default function Marketplace() {
 
   return (
     <>
-      <FixedNavbar />
+      <FixedNavbar/>
       <div className="fixed top-28 right-8 z-40">
         <LanguageToggle />
       </div>

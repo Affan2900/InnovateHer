@@ -39,14 +39,14 @@ export default function Login() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
-        throw new Error(errorData.error || "Failed to log in");
+        throw new Error(data.error || "Failed to log in");
       }
 
-      const userData = await response.json();
-      console.log('Login successful:', userData);
-      router.push(`/${currentLocale}/${userData._id}`);
+      console.log('Login successful:', data);
+      router.push(`/${currentLocale}/${data._id}`);
     } catch (err) {
       console.error('Error during login:', err.message);
       setError(err.message);
