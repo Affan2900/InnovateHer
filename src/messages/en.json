@@ -20,22 +20,26 @@
   },
   "Marketplace": {
     "marketplace": "Marketplace",
-    "buyNow": "Buy Now"
+    "buyNow": "Buy Now",
+    "addMarketplaceItem": "Add Item"
   },
   "Skill Building": {
     "skillBuilding": "Skill Building",
     "enrollNow": "Enroll Now",
-    "lessons": "Skill Building Lesson"
+    "lessons": "Skill Building Lesson",
+    "addSkillBuildingCourse": "Add Course"
   },
   "Networking": {
     "networking": "Networking",
     "register": "Register",
     "date": "Date",
-    "participants": "Participants"
+    "participants": "Participants",
+    "addNetworkingEvent": "Add Event"
   },
   "Mentorship": {
     "mentorship": "Mentorship",
-    "requestMentorship": "Request Mentorship"
+    "requestMentorship": "Request Mentorship",
+    "addMentroshipOpportunity": "Add Mentorship"
   },
   "Navbar":{
     "title":"InnovateHer",
@@ -62,5 +66,65 @@
     "registerButton":"Register",
     "loginHere":"Login",
     "alreadyHaveAccount":"Already Have an Account."
+  },
+  "addMarketplace":{
+    "addMarketplaceItem":"Add Marketplace Item",
+    "itemName": "Item Name:",
+    "itemPrice": "Item Price:",
+    "itemDescription": "Item Description:",
+    "addItem":"Add New Item"
+  },
+  "editMarketplace":{
+    "editMarketplaceItem":"Edit Marketplace Item",
+    "itemName": "Item Name:",
+    "itemPrice": "Item Price:",
+    "itemDescription": "Item Description:",
+    "updateItem":"Update Item"
+  },
+  "addSkillBuilding":{
+    "addSkillBuildingCourse": "Add Skill Building Course",
+    "courseName": "Course Name:",
+    "courseDuration": "Duration:",
+    "courseDescription": "Description:",
+    "addCourse": "Add New Course"
+  },
+  "editSkillBuilding":{
+    "editSkillBuildingCourse": "Edit Skill Building Course",
+    "courseName": "Course Name:",
+    "courseDuration": "Duration:",
+    "courseDescription": "Description:",
+    "updateCourse": "Update Course"
+  },
+  "addNetworking":{
+    "addNetworkingEvent": "Add Networking Event",
+    "eventName": "Event Name:",
+    "eventDate": "Date:",
+    "eventDescription": "Description:",
+    "eventLocation": "Location:",
+    "addEvent": "Add New Event"
+  },
+  "editNetworking":{
+    "editNetworkingEvent": "Edit Networking Event",
+    "eventName": "Event Name:",
+    "eventDate": "Date:",
+    "eventDescription": "Description:",
+    "eventLocation": "Location:",
+    "updateEvent": "Update Event"
+  },
+  "addMentorship":{
+    "addMentorshipOpportunity": "Add Mentorship Opportunity",
+    "mentorName": "Mentor Name:",
+    "mentorExpertise":"Expertise:",
+    "mentorshipDuration": "Duration:",
+    "mentorshipDescription": "Description",
+    "addMentorship": "Add New Mentorship"
+  },
+  "editMentorship":{
+    "editMentorshipOpportunity": "Edit Mentorship Opportunity",
+    "mentorName": "Mentor Name:",
+    "mentorExpertise":"Expertise:",
+    "mentorshipDuration": "Duration:",
+    "mentorshipDescription": "Description", 
+    "updateMentorship": "Update Mentorship"
   }
 }

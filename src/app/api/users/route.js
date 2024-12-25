@@ -1,26 +1,95 @@
-import connectMongo from "@/lib/connect";
-import User from "@/models/User";
+// src/app/api/users/route.js
+import { NextResponse } from 'next/server';
+import { getCollection } from '@/lib/connect';
+import bcrypt from 'bcrypt';
 
 export async function GET() {
+  const usersCollection = await getCollection("users");
+  if (!usersCollection) return NextResponse.json({ errors: { email: "Server error!" } }, { status: 500 });
+
   try {
-    await connectMongo();
-    const users = await User.find(); // Fetch all users
-    return new Response(JSON.stringify(users), { status: 200 });
+    // Fetch all users excluding the password field
+    const users = await usersCollection
+      .find({}, { projection: { password: 0 } }) // Exclude the password field
+      .toArray();
+
+    return NextResponse.json(users, { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error("Error fetching users:", error.message);
+    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
   }
 }
 
-export async function POST(request) {
+export async function POST(req) {
+  const usersCollection = await getCollection("users");
+
   try {
-    await connectMongo();
-    const { name, email, password, roles } = await request.json();
+    const { name, email, password } = await req.json();
 
-    const newUser = new User({ name, email, password, roles });
-    await newUser.save();
+    if (!name || !email || !password) {
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    }
 
-    return new Response(JSON.stringify(newUser), { status: 201 });
+    // Check if the user already exists
+    const existingUser = await usersCollection.findOne({ name });
+    if (existingUser) {
+      return NextResponse.json({ error: "Name Already Exists" }, { status: 400 });
+    }
+
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Set default roles
+    const roles = ["buyer"];
+
+    // Create the new user object
+    const newUser = {
+      name,
+      email,
+      password: hashedPassword,
+      roles,
+      currentRole: "buyer",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    // Insert the new user into the collection
+    const result = await usersCollection.insertOne(newUser);
+
+    // Fetch the newly created user excluding the password
+    const createdUser = await usersCollection.findOne({ _id: result.insertedId }, { projection: { password: 0 } });
+
+    return NextResponse.json(createdUser, { status: 201 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error("Error creating user:", error.message);
+    return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+  }
+}
+
+export async function LOGIN(req) {
+  const usersCollection = await getCollection('users');
+
+  try {
+    const { name, password } = await req.json();
+
+    if (!name || !password) {
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
+    }
+
+    const user = await usersCollection.findOne({ name });
+    if (!user) {
+      return NextResponse.json({ error: 'Invalid name or password' }, { status: 400 });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: 'Invalid name or password' }, { status: 400 });
+    }
+
+    const { password: _, ...userWithoutPassword } = user;
+    return NextResponse.json(userWithoutPassword, { status: 200 });
+  } catch (error) {
+    console.error('Error logging in:', error.message);
+    return NextResponse.json({ error: 'Failed to log in' }, { status: 500 });
   }
 }

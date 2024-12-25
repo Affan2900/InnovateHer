@@ -8,8 +8,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import LanguageToggle from '@/components/LanguageToggle' 
 import FixedNavbar from '@/components/FixedNavbar'
 
-
-
 export default function Register() {
   const t = useTranslations("Register")
   const pathname = usePathname();
@@ -20,6 +18,7 @@ export default function Register() {
     email: '',
     password: '',
   })
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -29,12 +28,31 @@ export default function Register() {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Here you would typically handle the registration logic
-    console.log('Registration submitted:', formData)
-    // For now, let's just redirect to the login page
-    router.push('/login')
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.error);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('Registration successful:', data);
+      // Redirect to the home page or login page after successful registration
+      router.push(`/${currentLocale}/login`);
+    } catch (error) {
+      console.error('Error during registration:', error);
+      setError('An unexpected error occurred. Please try again.');
+    }
   }
 
   return (
@@ -88,6 +106,7 @@ export default function Register() {
               onChange={handleChange}
             />
           </div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -108,4 +127,3 @@ export default function Register() {
     </>
   )
 }
-

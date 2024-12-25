@@ -19,12 +19,14 @@
   },
   "Marketplace": {
     "marketplace": "بازار",
-    "buyNow": "ابھی خریدیں۔"
+    "buyNow": "ابھی خریدیں۔",
+    "addMarketplaceItem": "آئٹم شامل کریں۔"
   },
   "Skill Building": {
     "skillBuilding": "اسکل بلڈنگ",
     "enrollNow": "ابھی اندراج کریں۔",
-    "lessons": "مہارت کی تعمیر کا سبق"
+    "lessons": "مہارت کی تعمیر کا سبق",
+    "addSkillBuildingCourse": "کورس شامل کریں۔"
   },
   "Networking": {
     "networking": "نیٹ ورکنگ",
@@ -54,6 +56,42 @@
     "noAccount":"رجسٹر کرنا چاہتے ہیں؟"
   },
   "Register": {
-    
+    "register":"سائن اپ کریں۔",
+    "password":"پاس ورڈ",
+    "name":"نام",
+    "email":"ای میل",
+    "registerButton":"رجسٹر کریں۔",
+    "loginHere":"لاگ ان",
+    "alreadyHaveAccount":"پہلے سے ہی ایک اکاؤنٹ ہے۔"
+  },
+  "addMarketplace":{
+    "addMarketplaceItem":"مارکیٹ پلیس آئٹم شامل کریں۔",
+    "itemName": "آئٹم کا نام:",
+    "itemPrice": "آئٹم کی قیمت:",
+    "itemDescription": ":آئٹم کی قیمت",
+    "addItem":"نیا آئٹم شامل کریں۔"
+  },
+  "addSkillBuilding":{
+    "addSkillBuildingCourse": "سکل بلڈنگ کورس شامل کریں۔",
+    "courseName": "کورس کا نام:",
+    "courseDuration": "دورانیہ:",
+    "courseDescription": "تفصیل:",
+    "addCourse": "نیا کورس شامل کریں۔"
+  },
+  "addNetworking":{
+    "addNetworkingEvent": "نیٹ ورکنگ ایونٹ شامل کریں۔",
+    "eventName": "ایونٹ کا نام:",
+    "eventDate": "تاریخ:",
+    "eventDescription": "تفصیل:",
+    "eventLocation": "مقام:",
+    "addEvent": "نیا واقعہ شامل کریں۔"
+  },
+  "addMentorship":{
+    "addMentorshipOpportunity": "رہنمائی کا موقع شامل کریں۔",
+    "mentorName": "نام:",
+    "mentorExpertise":"مہارت:",
+    "mentorshipDuration": "دورانیہ:",
+    "mentorshipDescription": "تفصیل:",
+    "addMentorship": "نئی رہنمائی شامل کریں۔"
   }
 }

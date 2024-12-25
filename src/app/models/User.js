@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique:true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    roles: { type: [String], enum: ["customer", "seller"], required: true }, // User roles
+    roles: { type: [String], enum: ["buyer", "seller"]}, // User roles
+    currentRole: { type: String, enum: ["buyer", "seller"], default: "buyer" }, // Current role
     servicesOffered: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }], // Services the user sells
     servicesBought: [
       {
