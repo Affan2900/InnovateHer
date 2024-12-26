@@ -6,32 +6,17 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Profile from '@/components/Profile';
+import { useUserStore } from '@/lib/store/userStore';
+
 
 const FixedNavbar = () => {
-  const [user, setUser] = useState(null);
+  const user = useUserStore(state => state.user);
   const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
+  const currentLocale = pathname.split('/')[1] || 'en';
   const t = useTranslations("Navbar");
-  const pathParts = pathname.split('/');
-  const userId = pathParts.length === 3 ? pathParts[2] : null;
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (userId && userId.length === 24) {
-        try {
-          const response = await fetch(`/api/users/${userId}`);
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData);
-          }
-        } catch (error) {
-          console.error('Error fetching user:', error);
-        }
-      }
-    };
- 
-    fetchUser();
-  }, [userId]);
+  // Remove the useState and useEffect for fetching user
+  // as it's now handled by Zustand
 
   const navItems = [
     { key: 'home', label: t('Home'), path: '/' },
@@ -41,15 +26,13 @@ const FixedNavbar = () => {
     { key: 'mentorship', label: t('Mentorship'), path: '/mentorship' },
   ];
 
-  // Add locale and user ID to href dynamically
-const localizedNavItems = navItems.map((item) => ({
-  ...item,
-  href: userId
-    ? `/${currentLocale}/${userId}${item.path}` // Include user ID if it exists
-    : `/${currentLocale}${item.path}`,        // Fallback to locale-only paths
-}));
+  const localizedNavItems = navItems.map((item) => ({
+    ...item,
+    href: user
+      ? `/${currentLocale}/${user._id}${item.path}`
+      : `/${currentLocale}${item.path}`,
+  }));
 
-  // Check if current pathname includes "login" or "register"
   const shouldHideLoginButton = pathname.includes('/login') || pathname.includes('/register');
 
   return (
@@ -73,7 +56,7 @@ const localizedNavItems = navItems.map((item) => ({
               </Link>
             </motion.li>
           ))}
-          {user && userId ? (
+          {user ? (
             <motion.li
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

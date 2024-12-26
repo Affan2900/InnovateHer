@@ -6,8 +6,10 @@ import bcrypt from 'bcrypt'
 export async function GET(req, { params }) {
   try {
     const usersCollection = await getCollection('users');
-    const id = new ObjectId(params.id);
-    const user = await usersCollection.findOne({ _id: id });
+    // Await the params before using them
+    const { id } = await params;
+    const objectId = new ObjectId(id);
+    const user = await usersCollection.findOne({ _id: objectId });
     
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

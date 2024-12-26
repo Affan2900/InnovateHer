@@ -93,5 +93,10 @@
     "mentorshipDuration": "دورانیہ:",
     "mentorshipDescription": "تفصیل:",
     "addMentorship": "نئی رہنمائی شامل کریں۔"
+  },
+  "Profile":{
+    "profile": "پروفائل",
+    "logout": "لاگ آؤٹ",
+    "changeRole": "کردار تبدیل کریں۔"
   }
 }

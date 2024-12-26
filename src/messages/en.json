@@ -126,5 +126,10 @@
     "mentorshipDuration": "Duration:",
     "mentorshipDescription": "Description", 
     "updateMentorship": "Update Mentorship"
+  },
+  "Profile":{
+    "profile": "Profile",
+    "logout": "Logout",
+    "changeRole": "Change Role"
   }
 }
