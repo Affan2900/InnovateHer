@@ -1,29 +1,24 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { useTranslations } from "next-intl";
-import { ChevronDown } from "lucide-react";
+// filepath: /D:/Semester 5/Web Engineering/innovateher/src/components/Profile.jsx
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import { ChevronDown } from 'lucide-react';
+import useLocaleStore from '@/lib/store/useLocaleStore';
 
-const Profile = ({ currentRole, onLogout, onChangeRole, userName = "John Doe" }) => {
-  const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1] || 'en';
-  const [role, setRole] = useState(currentRole);
+const Profile = ({ currentRole, onLogout, onChangeRole, userName }) => {
+  const { currentLocale } = useLocaleStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const router = useRouter();
-  const t = useTranslations("Profile");
-
-  const roleColors = {
-    buyer: "bg-purple-600",
-    seller: "bg-purple-800",
-  };
+  const t = useTranslations('Profile');
 
   // Get initials from userName
   const getInitials = (name) => {
     return name
       .split(' ')
-      .map(word => word[0])
+      .map((word) => word[0])
       .join('')
       .toUpperCase();
   };
@@ -56,13 +51,13 @@ const Profile = ({ currentRole, onLogout, onChangeRole, userName = "John Doe" })
     <div className="relative" ref={dropdownRef}>
       {/* Avatar Circle */}
       <motion.button
-        className={`${roleColors[role]} w-10 h-10 rounded-full flex items-center justify-center text-white font-bold cursor-pointer`}
+        className="bg-purple-600 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         {getInitials(userName)}
-        <ChevronDown 
+        <ChevronDown
           className={`ml-1 h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />
       </motion.button>
@@ -78,8 +73,8 @@ const Profile = ({ currentRole, onLogout, onChangeRole, userName = "John Doe" })
             transition={{ duration: 0.2 }}
           >
             {/* Current Role */}
-            <div className={`${roleColors[role]} px-4 py-2 text-white`}>
-              <p className="text-sm font-medium">{t('role')}: {role}</p>
+            <div className="bg-purple-600 px-4 py-2 text-white">
+              <p className="text-sm font-medium">Current Role: {currentRole}</p>
             </div>
 
             {/* Dropdown Actions */}

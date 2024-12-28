@@ -6,7 +6,7 @@ const ServiceSchema = new mongoose.Schema(
     description: { type: String, required: true },
     category: {
       type: String,
-      enum: ["marketplace", "skill building", "mentorship", "networking"],
+      enum: ["marketplace", "skill-building", "mentorship", "networking"],
       required: true,
     }, // Category of the service
     price: { type: Number, required: true }, // Service price

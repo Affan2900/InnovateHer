@@ -1,4 +1,3 @@
-// src/app/api/users/route.js
 import { NextResponse } from 'next/server';
 import { getCollection } from '@/lib/connect';
 import bcrypt from 'bcrypt';

@@ -1,39 +1,60 @@
-'use client'
+// filepath: /d:/Semester 5/Web Engineering/innovateher/src/app/[locale]/[id]/marketplace/[serviceId]/edit/page.jsx
+'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import FixedNavbar from '@/components/FixedNavbar';
-import LanguageToggle from '@/components/LanguageToggle';
+import { motion } from 'framer-motion';
+import { useRouter, useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import useLocaleStore from '@/lib/store/useLocaleStore';
 
-export default function AddMentorshipOpportunity() {
-  const t = useTranslations("addMentorship")
+export default function EditMarketplaceItem() {
+  const t = useTranslations("editMarketplace");
   const { data: session } = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
   const { currentLocale } = useLocaleStore();
   const user = session?.user;
-  const category = pathname.split('/')[3]; // Extract category from the URL
+  const router = useRouter();
+  const params = useParams();
+
   const [formData, setFormData] = useState({
     name: '',
-    expertise: '',
-    duration: '',
-    description: '',
     price: '',
-  })
-  const [loading, setLoading] = useState(false);
+    description: '',
+  });
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        console.log(`Fetching service with ID: ${params.serviceId}`); // Debugging information
+        const response = await fetch(`/api/services/${user.id}/marketplace?serviceId=${params.serviceId}`);
+        if (!response.ok) throw new Error('Failed to fetch service');
+        const data = await response.json();
+        const service = data.service;
+        setFormData({
+          name: service.title,
+          price: service.price,
+          description: service.description,
+        });
+      } catch (error) {
+        console.error('Error fetching service:', error.message);
+        setError('Failed to fetch service data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchService();
+  }, [params.serviceId]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,18 +62,17 @@ export default function AddMentorshipOpportunity() {
     setError(null);
 
     const body = {
+      id: params.serviceId,
       title: formData.name,
-      expertise: formData.expertise,
-      duration: formData.duration,
+      price: formData.price,
       description: formData.description,
-      price: formData.price, // Include price in the request body
-      category, // Use category extracted from the URL
+      category: 'marketplace', // Use category extracted from the URL
       sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
     };
 
     try {
-      const response = await fetch(`/api/services/${user.id}/mentorship`, {
-        method: 'POST',
+      const response = await fetch(`/api/services/${user.id}/marketplace`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -61,9 +81,9 @@ export default function AddMentorshipOpportunity() {
 
       if (!response.ok) {
         const { error } = await response.json();
-        setError(error || 'Failed to add the item.');
+        setError(error || 'Failed to update the item.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/mentorship`); // Redirect to marketplace
+        router.push(`/${currentLocale}/${user.id}/marketplace`); // Redirect to marketplace
       }
     } catch (err) {
       console.error('Error submitting form:', err.message);
@@ -73,6 +93,14 @@ export default function AddMentorshipOpportunity() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
+        <p className="text-2xl font-semibold">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
       <motion.div
@@ -81,10 +109,11 @@ export default function AddMentorshipOpportunity() {
         transition={{ duration: 0.5 }}
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
       >
-        <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('addMentorshipOpportunity')}</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('editMarketplaceItem')}</h2>
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('mentorName')}</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('itemName')}</label>
             <input
               type="text"
               id="name"
@@ -96,31 +125,19 @@ export default function AddMentorshipOpportunity() {
             />
           </div>
           <div>
-            <label htmlFor="expertise" className="block text-sm font-medium text-gray-700">{t('mentorExpertise')}</label>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">{t('itemPrice')}</label>
             <input
-              type="text"
-              id="expertise"
-              name="expertise"
+              type="number"
+              id="price"
+              name="price"
               required
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-              value={formData.expertise}
+              value={formData.price}
               onChange={handleChange}
             />
           </div>
           <div>
-            <label htmlFor="duration" className="block text-sm font-medium text-gray-700">{t('mentorshipDuration')}</label>
-            <input
-              type="text"
-              id="duration"
-              name="duration"
-              required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-              value={formData.duration}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('mentorshipDescription')}</label>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('itemDescription')}</label>
             <textarea
               id="description"
               name="description"
@@ -130,30 +147,16 @@ export default function AddMentorshipOpportunity() {
               onChange={handleChange}
             ></textarea>
           </div>
-          <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">{t('mentorshipPrice')}</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                required
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                value={formData.price}
-                onChange={handleChange}
-              />
-            </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-            disabled={loading}
-            >
-              {loading ? 'Loading...' : t('addMentorship')}
+          >
+            {t('updateItem')}
           </motion.button>
         </form>
       </motion.div>
     </div>
-  )
+  );
 }
-

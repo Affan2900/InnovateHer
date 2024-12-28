@@ -1,5 +1,5 @@
 {
-  "HeroNavbar":{
+  "HeroNavbar": {
     "title": "InnovateHer",
     "heroSubtitle": "Empowering Rural Women Entrepreneurs Through Ingenious Engineering Solutions",
     "exploreMarketplace": "Explore Marketplace",
@@ -8,42 +8,50 @@
     "impactStat1": "Empowered Over 1,000 Rural Entrepreneurs Globally",
     "impactStat2": "Simplified E-Commerce Solutions for Low-End Devices",
     "impactStat3": "Bridging the Gap with Culturally Inclusive Design",
-    "scrollPrompt":"See Our Mission"
+    "scrollPrompt": "See Our Mission"
   },
-  "Home":{
+  "Home": {
     "title": "InnovateHer",
     "missionTitle": "Our Mission",
     "missionDescription": "Our mission is to empower rural women entrepreneurs by engineering innovative web solutions tailored to their unique needs. Through a strategic selection of technology stacks, culturally sensitive design, and inclusive features, we aim to address challenges like accessibility, multilingual support, and usability for diverse stakeholders. By fostering collaborative teamwork, balancing conflicting requirements, and prioritizing stakeholder needs, we strive to create transformative tools that promote growth, learning, and self-sufficiency in rural communities.",
-    "aboutTitle":"About Us",
+    "aboutTitle": "About Us",
     "aboutDescription": "We are a dedicated team of innovators committed to crafting technology-driven solutions that address real-world challenges. With a focus on empowering rural women entrepreneurs, we specialize in developing culturally adaptive web applications that prioritize accessibility, usability, and inclusivity. Our expertise lies in navigating complex requirements, fostering collaboration among diverse stakeholders, and delivering impactful tools that bridge technological and societal gaps. By blending technical ingenuity with a deep understanding of community needs, we aim to drive sustainable growth and create meaningful opportunities for underrepresented groups."
-    
   },
   "Marketplace": {
     "marketplace": "Marketplace",
     "buyNow": "Buy Now",
-    "addMarketplaceItem": "Add Item"
+    "addMarketplaceItem": "Add Item",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "Skill Building": {
     "skillBuilding": "Skill Building",
     "enrollNow": "Enroll Now",
     "lessons": "Skill Building Lesson",
-    "addSkillBuildingCourse": "Add Course"
+    "addSkillBuildingCourse": "Add Course",
+    "price":"Price:",
+    "edit": "Edit"
   },
   "Networking": {
     "networking": "Networking",
     "register": "Register",
     "date": "Date",
     "participants": "Participants",
-    "addNetworkingEvent": "Add Event"
+    "addNetworkingEvent": "Add Event",
+    "price":"Price: ",
+    "viewDetails":"View Details",
+    "location": "Location: ",
+    "edit": "Edit"
   },
   "Mentorship": {
     "mentorship": "Mentorship",
     "requestMentorship": "Request Mentorship",
-    "addMentroshipOpportunity": "Add Mentorship"
+    "addMentorshipOpportunity": "Add Mentorship",
+    "edit": "Edit"
   },
-  "Navbar":{
-    "title":"InnovateHer",
-    "login":"Login",
+  "Navbar": {
+    "title": "InnovateHer",
+    "login": "Login",
     "Home": "Home",
     "Marketplace": "Marketplace",
     "Skill Building": "Skill Building",
@@ -51,83 +59,92 @@
     "Mentorship": "Mentorship"
   },
   "Login": {
-    "name":"Name",
-    "password":"Password",
-    "login":"Sign In",
-    "loginButton":"Login",
-    "registerHere":"Click Here",
-    "noAccount":"Want to Register?"
+    "name": "Name",
+    "password": "Password",
+    "login": "Sign In",
+    "email": "Email",
+    "loginButton": "Login",
+    "registerHere": "Click Here",
+    "noAccount": "Want to Register?"
   },
   "Register": {
-    "register":"Sign Up",
-    "password":"Password",
-    "name":"Name",
-    "email":"Email",
-    "registerButton":"Register",
-    "loginHere":"Login",
-    "alreadyHaveAccount":"Already Have an Account."
+    "register": "Sign Up",
+    "password": "Password",
+    "name": "Name",
+    "email": "Email",
+    "registerButton": "Register",
+    "loginHere": "Login",
+    "alreadyHaveAccount": "Already Have an Account."
   },
-  "addMarketplace":{
-    "addMarketplaceItem":"Add Marketplace Item",
+  "addMarketplace": {
+    "addMarketplaceItem": "Add Marketplace Item",
     "itemName": "Item Name:",
     "itemPrice": "Item Price:",
     "itemDescription": "Item Description:",
-    "addItem":"Add New Item"
+    "addItem": "Add New Item"
   },
-  "editMarketplace":{
-    "editMarketplaceItem":"Edit Marketplace Item",
+  "editMarketplace": {
+    "editMarketplaceItem": "Edit Marketplace Item",
     "itemName": "Item Name:",
     "itemPrice": "Item Price:",
     "itemDescription": "Item Description:",
-    "updateItem":"Update Item"
+    "updateItem": "Update Item"
   },
-  "addSkillBuilding":{
+  "addSkillBuilding": {
     "addSkillBuildingCourse": "Add Skill Building Course",
     "courseName": "Course Name:",
     "courseDuration": "Duration:",
     "courseDescription": "Description:",
-    "addCourse": "Add New Course"
+    "addCourse": "Add New Course",
+    "courseDifficulty": "Difficulty:",
+    "coursePrice": "Price:"
   },
-  "editSkillBuilding":{
+  "editSkillBuilding": {
     "editSkillBuildingCourse": "Edit Skill Building Course",
     "courseName": "Course Name:",
     "courseDuration": "Duration:",
     "courseDescription": "Description:",
-    "updateCourse": "Update Course"
+    "updateCourse": "Update Course",
+    "coursePrice": "Price:",
+    "courseDifficulty": "Difficulty:"
   },
-  "addNetworking":{
+  "addNetworking": {
     "addNetworkingEvent": "Add Networking Event",
     "eventName": "Event Name:",
     "eventDate": "Date:",
     "eventDescription": "Description:",
     "eventLocation": "Location:",
-    "addEvent": "Add New Event"
+    "addEvent": "Add New Event",
+    "eventPrice":"Price: "
   },
-  "editNetworking":{
+  "editNetworking": {
     "editNetworkingEvent": "Edit Networking Event",
     "eventName": "Event Name:",
     "eventDate": "Date:",
     "eventDescription": "Description:",
     "eventLocation": "Location:",
-    "updateEvent": "Update Event"
+    "updateEvent": "Update Event",
+    "eventPrice": "Price:"
   },
-  "addMentorship":{
+  "addMentorship": {
     "addMentorshipOpportunity": "Add Mentorship Opportunity",
     "mentorName": "Mentor Name:",
-    "mentorExpertise":"Expertise:",
+    "mentorExpertise": "Expertise:",
     "mentorshipDuration": "Duration:",
     "mentorshipDescription": "Description",
-    "addMentorship": "Add New Mentorship"
+    "addMentorship": "Add New Mentorship",
+    "mentorshipPrice": "Price:"
   },
-  "editMentorship":{
+  "editMentorship": {
     "editMentorshipOpportunity": "Edit Mentorship Opportunity",
     "mentorName": "Mentor Name:",
-    "mentorExpertise":"Expertise:",
+    "mentorExpertise": "Expertise:",
     "mentorshipDuration": "Duration:",
-    "mentorshipDescription": "Description", 
-    "updateMentorship": "Update Mentorship"
+    "mentorshipDescription": "Description",
+    "updateMentorship": "Update Mentorship",
+    "mentorshipPrice": "Price:"
   },
-  "Profile":{
+  "Profile": {
     "profile": "Profile",
     "logout": "Logout",
     "changeRole": "Change Role"

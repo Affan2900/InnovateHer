@@ -20,23 +20,30 @@
   "Marketplace": {
     "marketplace": "بازار",
     "buyNow": "ابھی خریدیں۔",
-    "addMarketplaceItem": "آئٹم شامل کریں۔"
+    "addMarketplaceItem": "آئٹم شامل کریں۔",
+    "edit": "ترمیم کریں۔",
+    "delete": "حذف کریں۔"
   },
   "Skill Building": {
     "skillBuilding": "اسکل بلڈنگ",
     "enrollNow": "ابھی اندراج کریں۔",
     "lessons": "مہارت کی تعمیر کا سبق",
-    "addSkillBuildingCourse": "کورس شامل کریں۔"
+    "addSkillBuildingCourse": "کورس شامل کریں۔",
+    "price":"قیمت",
+    "edit": "ترمیم کریں۔"
   },
   "Networking": {
     "networking": "نیٹ ورکنگ",
     "register":"رجسٹر کریں۔",
     "date": "تاریخ",
-    "participants": "شرکاء"
+    "participants": "شرکاء",
+    "price":"قیمت: ",
+    "edit": "ترمیم کریں۔"
   },
   "Mentorship": {
     "mentorship": "سرپرستی",
-    "requestMentorship": "رہنمائی کی درخواست کریں۔"
+    "requestMentorship": "رہنمائی کی درخواست کریں۔",
+    "edit": "ترمیم کریں۔"
   },
   "Navbar":{
     "title":"InnovateHer",
@@ -51,6 +58,7 @@
     "name":"نام",
     "password":"پاس ورڈ",
     "login":"سائن ان کریں۔",
+    "email": "ای میل",
     "loginButton":"لاگ ان",
     "registerHere":"یہاں کلک کریں۔",
     "noAccount":"رجسٹر کرنا چاہتے ہیں؟"
@@ -76,7 +84,9 @@
     "courseName": "کورس کا نام:",
     "courseDuration": "دورانیہ:",
     "courseDescription": "تفصیل:",
-    "addCourse": "نیا کورس شامل کریں۔"
+    "addCourse": "نیا کورس شامل کریں۔",
+    "courseDifficulty": "Difficulty:",
+    "coursePrice": "Price:"
   },
   "addNetworking":{
     "addNetworkingEvent": "نیٹ ورکنگ ایونٹ شامل کریں۔",
@@ -84,7 +94,9 @@
     "eventDate": "تاریخ:",
     "eventDescription": "تفصیل:",
     "eventLocation": "مقام:",
-    "addEvent": "نیا واقعہ شامل کریں۔"
+    "addEvent": "نیا واقعہ شامل کریں۔",
+    "eventPrice": "Price:",
+    "viewDetails":"View Details"
   },
   "addMentorship":{
     "addMentorshipOpportunity": "رہنمائی کا موقع شامل کریں۔",
@@ -92,7 +104,8 @@
     "mentorExpertise":"مہارت:",
     "mentorshipDuration": "دورانیہ:",
     "mentorshipDescription": "تفصیل:",
-    "addMentorship": "نئی رہنمائی شامل کریں۔"
+    "addMentorship": "نئی رہنمائی شامل کریں۔",
+    "mentorshipPrice": "Price:"
   },
   "Profile":{
     "profile": "پروفائل",

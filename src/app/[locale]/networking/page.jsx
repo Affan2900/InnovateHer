@@ -6,44 +6,37 @@ import Link from 'next/link'
 import { Calendar, MapPin, Users } from 'lucide-react'
 import FixedNavbar from '@/components/FixedNavbar'
 import LanguageToggle from '@/components/LanguageToggle'
-import { usePathname } from 'next/navigation'
+import useLocaleStore from '@/lib/store/useLocaleStore';
+import { useState, useEffect } from 'react'
+import { useSession} from 'next-auth/react';
+
 
 
 export default function Networking() {
   const t = useTranslations("Networking")
-  const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
+  const { currentLocale } = useLocaleStore();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { data: session } = useSession(); // Access session data
+  const user = session?.user; // Get user details from the session
 
 
-
-
-  const events = [
-    { 
-      name: 'Women Entrepreneurs Meetup' , 
-      date: '2023-07-15',
-      image: '/images/entrepreneurs-meetup.jpg',
-      location: 'Lahore Convention Center',
-      description: 
-       'Connecting and empowering women entrepreneurs across different sectors' ,
-      participants: 150
-    },
-    { 
-      name: 'Rural Business Forum', 
-      date: '2023-08-01',
-      image: '/images/rural-business-forum.jpg',
-      location:'Islamabad Tech Park',
-      description:'Exploring growth opportunities in rural entrepreneurship',
-      participants: 200
-    },
-    { 
-      name:'Artisan Networking Event', 
-      date: '2023-08-20',
-      image: '/images/artisan-networking.jpg',
-      location: 'Karachi Art Gallery',
-      description: 'Connecting local artisans and creating collaborative opportunities',
-      participants: 100
-    },
-  ]
+  useEffect(() => {
+      const fetchServices = async () => {
+        try {
+          const response = await fetch('/api/services');
+          const data = await response.json();
+          const filteredServices = data.filter((service) => service.category === 'networking');
+          setEvents(filteredServices);
+        } catch (error) {
+          console.error('Error fetching services:', error.message);
+        } finally {
+          setLoading(false); // Ensure the loading state is updated
+        }
+      };
+  
+      fetchServices();
+    }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -61,6 +54,14 @@ export default function Networking() {
       x: 0,
       opacity: 1
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+        <p className="text-2xl font-semibold">Loading</p>
+      </div>
+    );
   }
 
   return (
@@ -82,7 +83,18 @@ export default function Networking() {
         </motion.h2>
 
         <div className="m-12 text-center">
-            <Link href={`/${currentLocale}/networking/add`}>
+          { user ? (
+            <Link href={`/${currentLocale}/${user.id}/networking/add`}>
+            <motion.button 
+              className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t('addNetworkingEvent')}
+            </motion.button>
+          </Link>
+          ) : (
+            <Link href={`/${currentLocale}/login`}>
               <motion.button 
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
                 whileHover={{ scale: 1.05 }}
@@ -91,6 +103,8 @@ export default function Networking() {
                 {t('addNetworkingEvent')}
               </motion.button>
             </Link>
+          )}
+            
           </div>
         
         {events.map((event, index) => (

@@ -7,39 +7,34 @@ import Link from 'next/link'
 import { BookOpen, Clock, TrendingUp } from 'lucide-react'
 import FixedNavbar from '@/components/FixedNavbar'
 import LanguageToggle from '@/components/LanguageToggle'
-import { usePathname } from 'next/navigation'
-
+import useLocaleStore from '@/lib/store/useLocaleStore';
+import { useEffect, useState } from 'react'
+import { useSession} from 'next-auth/react';
 
 export default function SkillBuilding() {
   const t = useTranslations("Skill Building")
-  const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
+  const { currentLocale } = useLocaleStore();
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { data: session } = useSession(); // Access session data
+  const user = session?.user;
 
+  useEffect(() => {
+      const fetchServices = async () => {
+        try {
+          const response = await fetch('/api/services');
+          const data = await response.json();
+          const filteredServices = data.filter((service) => service.category === 'skill-building');
+          setCourses(filteredServices);
+        } catch (error) {
+          console.error('Error fetching services:', error.message);
+        } finally {
+          setLoading(false); // Ensure the loading state is updated
+        }
+      };
   
-
-  const courses = [
-    { 
-      name: 'Basic Entrepreneurship',
-      image: '/images/entrepreneurship-course.jpg',
-      description: 'Learn fundamental business skills and startup strategies',
-      duration: '4 Weeks',
-      difficulty: 'Beginner',
-    },
-    { 
-      name:'Digital Marketing',
-      image: '/images/digital-marketing-course.jpg',
-      description: 'Master online marketing techniques and social media strategies',
-      duration: '6 Weeks',
-      difficulty: 'Intermediate'
-    },
-    { 
-      name: 'Financial Management',
-      image: '/images/financial-management-course.jpg',
-      description: 'Develop financial planning and investment skills',
-      duration: '5 Weeks',
-      difficulty:'Advanced',
-    },
-  ]
+      fetchServices();
+    }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -57,6 +52,14 @@ export default function SkillBuilding() {
       x: 0,
       opacity: 1
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+        <p className="text-2xl font-semibold">Loading</p>
+      </div>
+    );
   }
 
   return (
@@ -78,7 +81,18 @@ export default function SkillBuilding() {
         </motion.h2>
 
         <div className="mt-12 text-center">
-            <Link href={`/${currentLocale}/skill-building/add`}>
+          {user ? (
+            <Link href={`/${currentLocale}/${user.id}/skill-building/add`}>
+            <motion.button 
+              className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t('addSkillBuildingCourse')}
+            </motion.button>
+          </Link>
+          ) : (
+            <Link href={`/${currentLocale}/login`}>
               <motion.button 
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
                 whileHover={{ scale: 1.05 }}
@@ -87,6 +101,7 @@ export default function SkillBuilding() {
                 {t('addSkillBuildingCourse')}
               </motion.button>
             </Link>
+          )}
           </div>
         
         {courses.map((course, index) => (

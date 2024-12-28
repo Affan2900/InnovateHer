@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
-
+import SessionProviderWrapper from "@/components/SessionProviderWrapper"; // New wrapper component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,24 +35,22 @@ export const metadata = {
 };
 
 export default async function LocaleLayout({ children, params }) {
-  // Await params to ensure it is ready before accessing `locale`
-  
-  //AS IN NEXT-15 THEY ARE MADE ASYNCHRONUS
-  const { locale } = await params;
+  const  { locale } = await params;
 
   // Validate that the locale is supported
   if (!routing.locales.includes(locale)) {
     notFound(); // Throw a 404 error if locale is invalid
   }
 
-  // Fetch messages for the selected locale
+  // Messages are fetched on the server; wrap them in `NextIntlClientProvider`.
   const messages = await getMessages({ locale });
 
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          {/* Wrap children with SessionProviderWrapper */}
+          <SessionProviderWrapper>{children}</SessionProviderWrapper>
         </NextIntlClientProvider>
       </body>
     </html>

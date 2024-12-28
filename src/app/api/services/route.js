@@ -1,24 +1,21 @@
-import connectMongo from "@/lib/connect";
-import Service from "@/models/Service";
+import { NextResponse } from 'next/server';
+import { getCollection } from '@/lib/connect'; // Replace with your database connection logic
 
 export async function GET() {
-  try {
-    await connectMongo();
-    const services = await Service.find();
-    return new Response(JSON.stringify(services), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  const servicesCollection = await getCollection('services'); // Fetch the "services" collection
+  if (!servicesCollection) {
+    return NextResponse.json({ error: 'Server error!' }, { status: 500 });
   }
-}
 
-export async function POST(request) {
   try {
-    await connectMongo();
-    const serviceData = await request.json();
-    const newService = new Service(serviceData);
-    await newService.save();
-    return new Response(JSON.stringify(newService), { status: 201 });
+    // Fetch all services, including seller and customers (populated)
+    const services = await servicesCollection
+      .find({})
+      .toArray();
+
+    return NextResponse.json(services, { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error('Error fetching services:', error.message);
+    return NextResponse.json({ error: 'Failed to fetch services' }, { status: 500 });
   }
 }

@@ -1,41 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import Profile from '@/components/Profile';
-import { useUserStore } from '@/lib/store/userStore';
+import { useSession } from 'next-auth/react';
+import useLocaleStore from '@/lib/store/useLocaleStore';
 
 const Navbar = ({ isVisible }) => {
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
-  const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1] || 'en';
+  const { data: session } = useSession();
+  const user = session?.user;
+  const { currentLocale } = useLocaleStore();
   const t = useTranslations('Navbar');
-
-  // Extract `userId` from the pathname
-  const pathParts = pathname.split('/');
-  const userId = pathParts.length >= 3 ? pathParts[2] : null;
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (userId && userId.length === 24 && !user) {
-        try {
-          const response = await fetch(`/api/users/${userId}`);
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData); // Update user in the store
-          }
-        } catch (error) {
-          console.error('Error fetching user:', error);
-        }
-      }
-    };
-
-    fetchUser();
-  }, [userId, user, setUser]);
 
   const navItems = [
     { key: 'home', label: t('Home'), path: '/' },
@@ -45,12 +21,11 @@ const Navbar = ({ isVisible }) => {
     { key: 'mentorship', label: t('Mentorship'), path: '/mentorship' },
   ];
 
-  // Add locale and user ID to href dynamically
   const localizedNavItems = navItems.map((item) => ({
     ...item,
-    href: userId
-      ? `/${currentLocale}/${userId}${item.path}` // Include user ID if it exists
-      : `/${currentLocale}${item.path}`, // Fallback to locale-only paths
+    href: session
+      ? `/${currentLocale}/${user.id}${item.path}`
+      : `/${currentLocale}${item.path}`,
   }));
 
   return (
@@ -80,12 +55,12 @@ const Navbar = ({ isVisible }) => {
             </motion.li>
           ))}
           <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-            {userId && user ? (
+            {user ? (
               <Profile
-                userName={user.name} // Pass user's name as userName prop
-                currentRole={user.currentRole} // Pass currentRole from user object
+                userName={user.name}
+                currentRole={user.currentRole}
                 onLogout={() => {
-                  setUser(null); // Clear user from store
+                  // Implement logout logic here
                 }}
                 onChangeRole={() => {
                   console.log('Change role action triggered');

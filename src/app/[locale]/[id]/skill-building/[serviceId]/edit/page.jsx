@@ -1,41 +1,64 @@
-// filepath: /D:/Semester 5/Web Engineering/innovateher/src/app/[locale]/[id]/skill-building/add/page.jsx
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import FixedNavbar from '@/components/FixedNavbar';
-import LanguageToggle from '@/components/LanguageToggle';
+import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { motion } from 'framer-motion'
+import { useRouter, useParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import useLocaleStore from '@/lib/store/useLocaleStore';
 
-export default function AddSkillBuildingCourse() {
-  const t = useTranslations('addSkillBuilding');
+export default function EditSkillBuildingCourse() {
+  const t = useTranslations("editSkillBuilding")
   const { data: session } = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
   const { currentLocale } = useLocaleStore();
   const user = session?.user;
-  const category = pathname.split('/')[3]; // Extract category from the URL
+  const router = useRouter();
+  const params = useParams();
+
 
   const [formData, setFormData] = useState({
     name: '',
     duration: '',
-    difficulty: '',
-    price: '',
     description: '',
-  });
-  const [loading, setLoading] = useState(false);
+    price: '',
+    difficulty: '',
+  })
+
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        console.log(`Fetching service with ID: ${params.serviceId}`); // Debugging information
+        const response = await fetch(`/api/services/${user.id}/skill-building?serviceId=${params.serviceId}`);
+        if (!response.ok) throw new Error('Failed to fetch service');
+        const data = await response.json();
+        const service = data.service;
+        setFormData({
+          name: service.title,
+          price: service.price,
+          description: service.description,
+          difficulty: service.difficulty,
+          duration: service.duration,
+        });
+      } catch (error) {
+        console.error('Error fetching service:', error.message);
+        setError('Failed to fetch service data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchService();
+  }, [params.serviceId]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
+    const { name, value } = e.target
+    setFormData(prevState => ({
       ...prevState,
-      [name]: value,
-    }));
-  };
+      [name]: value
+    }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,18 +66,19 @@ export default function AddSkillBuildingCourse() {
     setError(null);
 
     const body = {
+      id: params.serviceId,
       title: formData.name,
-      duration: formData.duration,
-      difficulty: formData.difficulty,
       price: formData.price,
       description: formData.description,
-      category, // Use category extracted from the URL
+      difficulty: formData.difficulty,
+      duration: formData.duration,
+      category: 'skill-building', // Use category extracted from the URL
       sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
     };
 
     try {
       const response = await fetch(`/api/services/${user.id}/skill-building`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -63,9 +87,9 @@ export default function AddSkillBuildingCourse() {
 
       if (!response.ok) {
         const { error } = await response.json();
-        setError(error || 'Failed to add the course.');
+        setError(error || 'Failed to update the item.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/skill-building`); // Redirect to skill-building
+        router.push(`/${currentLocale}/${user.id}/skill-building`); // Redirect to marketplace
       }
     } catch (err) {
       console.error('Error submitting form:', err.message);
@@ -75,18 +99,25 @@ export default function AddSkillBuildingCourse() {
     }
   };
 
-  return (
-    <>
-      <FixedNavbar />
-      <div className="fixed top-28 right-8 z-40">
-        <LanguageToggle />
-      </div>
+  if (loading) {
+    return (
       <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('addSkillBuildingCourse')}</h2>
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+        <p className="text-2xl font-semibold">Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
+      >
+        <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('editSkillBuildingCourse')}</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('courseName')}</label>
               <input
                 type="text"
@@ -145,18 +176,16 @@ export default function AddSkillBuildingCourse() {
                 onChange={handleChange}
               />
             </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-              disabled={loading}
-            >
-              {loading ? 'Loading...' : t('addCourse')}
-            </motion.button>
-          </form>
-        </div>
-      </div>
-    </>
-  );
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          >
+            {t('updateCourse')}
+          </motion.button>
+        </form>
+      </motion.div>
+    </div>
+  )
 }

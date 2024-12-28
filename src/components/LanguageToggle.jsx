@@ -1,22 +1,23 @@
-"use client";
+'use client';
 
 import { useRouter, usePathname } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { motion } from 'framer-motion';
+import useLocaleStore from '@/lib/store/useLocaleStore';
 
 export default function LanguageToggle() {
   const router = useRouter();
   const pathname = usePathname();
+  const { currentLocale, setLocale } = useLocaleStore();
 
   const localeNames = {
     en: "English",
     ur: "اردو",
   };
 
-  const currentLocale = pathname.split("/")[1] || routing.defaultLocale;
-
   const changeLanguage = (newLocale) => {
     const pathWithoutLocale = pathname.split("/").slice(2).join("/") || "";
+    setLocale(newLocale);
     router.push(`/${newLocale}/${pathWithoutLocale}`);
   };
 
