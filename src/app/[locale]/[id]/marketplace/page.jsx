@@ -133,7 +133,7 @@ export default function Marketplace() {
   >
     <div className="mb-6 overflow-hidden rounded-xl">
       <Image
-        src={service.image || '/images/default-service.jpg'} // Use a default image if none is provided
+        src={service.imageUrl || '/default.jpg'} // Use a default image if none is provided
         width={400}
         height={300}
         className="w-full h-64 object-cover rounded-xl transition-transform duration-300 hover:scale-110"

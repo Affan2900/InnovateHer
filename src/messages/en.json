@@ -81,7 +81,8 @@
     "itemName": "Item Name:",
     "itemPrice": "Item Price:",
     "itemDescription": "Item Description:",
-    "addItem": "Add New Item"
+    "addItem": "Add New Item",
+    "itemImage": "Upload Image:"
   },
   "editMarketplace": {
     "editMarketplaceItem": "Edit Marketplace Item",
