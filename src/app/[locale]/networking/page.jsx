@@ -119,7 +119,7 @@ export default function Networking() {
             <div className="md:w-2/3 p-6 flex flex-col justify-between">
               <div>
                 <h3 className="text-3xl font-bold mb-4">
-                  {event.name}
+                  {event.title}
                 </h3>
                 <p className="text-white text-opacity-80 mb-6">
                   {event.description}
@@ -129,7 +129,7 @@ export default function Networking() {
               <div className="space-y-4">
                 <div className="flex items-center text-white text-opacity-80">
                   <Calendar className="mr-3 text-white" size={24} />
-                  <span>{t('date')}: { event.date }</span>
+                  <span>{t('date')}: {dayjs(event.date).format('YYYY-MM-DD')}</span>
                 </div>
                 <div className="flex items-center text-white text-opacity-80">
                   <MapPin className="mr-3 text-white" size={24} />

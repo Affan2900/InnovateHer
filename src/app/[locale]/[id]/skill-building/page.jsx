@@ -64,8 +64,6 @@ export default function SkillBuilding() {
   }
 
   const onDelete = async (serviceId) => {
-
-    
     try {
       const response = await fetch(`/api/services/${user.id}/skill-building?serviceId=${serviceId}`, {
         method: 'DELETE',
@@ -77,11 +75,13 @@ export default function SkillBuilding() {
         return;
       }
   
-      router.push(`/${currentLocale}/${user.id}/skill-building`); // Refresh the page to update the list
+      // Update the local state to remove the deleted course
+      setCourses((prevCourses) => prevCourses.filter(course => course._id !== serviceId));
     } catch (err) {
       console.error('Error during deletion:', err.message);
     }
   };
+  
 
   if (loading) {
     return (
@@ -110,6 +110,7 @@ export default function SkillBuilding() {
         </motion.h2>
 
         <div className="mt-12 text-center">
+        {session?.user?.currentRole === 'seller' && (
             <Link href={`/${currentLocale}/${user.id}/skill-building/add`}>
               <motion.button 
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
@@ -119,7 +120,9 @@ export default function SkillBuilding() {
                 {t('addSkillBuildingCourse')}
               </motion.button>
             </Link>
+        )}
           </div>
+        
         
           {courses.map((course, index) => (
   <motion.div 
@@ -150,7 +153,7 @@ export default function SkillBuilding() {
           <span>{course.difficulty}</span>
         </div>
         <div className="flex items-center text-white text-opacity-80">
-          <p className="text-lg mb-4">{t('price')}: {course.price} PKR</p>
+          <p className="text-xl font-semibold mb-4">{t('price')} {course.price} PKR</p>
         </div>
         <div className="flex items-center text-white text-opacity-80">
           <BookOpen className="mr-3 text-white" size={24} />

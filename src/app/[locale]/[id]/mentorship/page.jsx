@@ -76,7 +76,8 @@ export default function Mentorship() {
         return;
       }
   
-      router.push(`/${currentLocale}/${user.id}/mentorship`); // Refresh the page to update the list
+      // Update the local state to remove the deleted course
+      setMentors((prevMentors) => prevMentors.filter(mentor => mentor._id !== serviceId));
     } catch (err) {
       console.error('Error during deletion:', err.message);
     }
@@ -107,6 +108,7 @@ export default function Mentorship() {
           {t('mentorship')}
         </motion.h2>
         <div className="m-12 text-center">
+        {session?.user?.currentRole === 'seller' && (
             <Link href={`/${currentLocale}/${user.id}/mentorship/add`}>
               <motion.button 
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
@@ -116,6 +118,7 @@ export default function Mentorship() {
                 {t('addMentorshipOpportunity')}
               </motion.button>
             </Link>
+        )}
           </div>
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -142,8 +145,8 @@ export default function Mentorship() {
     <h3 className="text-2xl font-bold mb-2">{mentor.title}</h3>
     <p className="text-xl mb-4 text-white text-opacity-80">{mentor.expertise}</p>
     <p className="text-md mb-6 text-white text-opacity-70">{mentor.description}</p>
-    <p className="text-md mb-6 text-white text-opacity-70">{mentor.duration}</p>
-    <p className="text-md mb-6 text-white text-opacity-70">{mentor.price}</p>
+    <p className="text-md mb-6 text-white font-semibold text-lg text-opacity-100">{mentor.duration}</p>
+    <p className="text-md mb-6 text-white font-semibold text-lg text-opacity-100">{t('price')}{mentor.price}</p>
 
     {mentor.seller === session?.user?.id ? ( // Check if the mentorship is owned by the current session user
       <div className="mt-auto flex gap-4">

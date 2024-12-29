@@ -47,7 +47,8 @@
     "mentorship": "Mentorship",
     "requestMentorship": "Request Mentorship",
     "addMentorshipOpportunity": "Add Mentorship",
-    "edit": "Edit"
+    "edit": "Edit",
+    "price":"Price: "
   },
   "Navbar": {
     "title": "InnovateHer",
@@ -65,7 +66,10 @@
     "email": "Email",
     "loginButton": "Login",
     "registerHere": "Click Here",
-    "noAccount": "Want to Register?"
+    "noAccount": "Want to Register?",
+    "role": "Choose Role:",
+    "buyer": "Buyer",
+    "seller": "Seller"
   },
   "Register": {
     "register": "Sign Up",

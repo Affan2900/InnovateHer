@@ -9,15 +9,18 @@ import { signIn, useSession } from 'next-auth/react';
 import LanguageToggle from '@/components/LanguageToggle';
 import FixedNavbar from '@/components/FixedNavbar';
 import useLocaleStore from '@/lib/store/useLocaleStore';
+import useRoleStore from '@/lib/store/useRoleStore'; // Import role store
 
 export default function Login() {
   const t = useTranslations('Login');
   const { currentLocale } = useLocaleStore();
+  const { currentRole, setRole } = useRoleStore(); // Get role state and setter
   const router = useRouter();
   const { data: session } = useSession();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    role: 'buyer', // Set the current role from the Zustand store
   });
   const [error, setError] = useState(null);
 
@@ -35,6 +38,17 @@ export default function Login() {
     }));
   };
 
+  const handleRoleChange = (e) => {
+    const selectedRole = e.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      role: selectedRole, // Use "role" to match backend key
+    }));
+    setRole(selectedRole); // Update Zustand store
+  };
+  
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -44,6 +58,7 @@ export default function Login() {
         redirect: false,
         email: formData.email,
         password: formData.password,
+        role: formData.role, // Pass the currentRole to the backend
       });
 
       if (!result?.ok) {
@@ -100,6 +115,21 @@ export default function Login() {
                 value={formData.password}
                 onChange={handleChange}
               />
+            </div>
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                {t('role')}
+              </label>
+              <select
+                id="role"
+                name="role"
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                value={currentRole}
+                onChange={handleRoleChange}
+              >
+                <option value="buyer">{t('buyer')}</option>
+                <option value="seller">{t('seller')}</option>
+              </select>
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}

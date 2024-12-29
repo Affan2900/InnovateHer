@@ -39,7 +39,7 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Set default roles
-    const roles = ["buyer"];
+    const roles = ["buyer", "seller"];
 
     // Create the new user object
     const newUser = {

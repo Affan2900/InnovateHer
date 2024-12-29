@@ -116,7 +116,7 @@ export default function SkillBuilding() {
             <div className="md:w-2/3 p-6 flex flex-col justify-between">
               <div>
                 <h3 className="text-3xl font-bold mb-4">
-                  {course.name}
+                  {course.title}
                 </h3>
                 <p className="text-white text-opacity-80 mb-6">
                   {course.description}
@@ -150,25 +150,16 @@ export default function SkillBuilding() {
             </div>
             <div className="md:w-1/3 relative">
               <Image 
-                src={course.image} 
+                src={course.imageUrl} 
                 width={300} 
                 height={250}
                 className="w-full h-48 md:h-full object-cover"
+                alt={course.name}
               />
             </div>
           </motion.div>
         ))}
-        {/* <div className="mt-12 text-center">
-            <Link href={`/${currentLocale}/skill-building/add`}>
-              <motion.button 
-                className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('addSkillBuildingCourse')}
-              </motion.button>
-            </Link>
-          </div> */}
+        
       </div>
     </div>
     </>

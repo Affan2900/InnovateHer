@@ -38,12 +38,16 @@
     "date": "تاریخ",
     "participants": "شرکاء",
     "price":"قیمت: ",
+    "location": "مقام: ",
+    "addNetworkingEvent": "ایونٹ شامل کریں۔",
     "edit": "ترمیم کریں۔"
   },
   "Mentorship": {
     "mentorship": "سرپرستی",
     "requestMentorship": "رہنمائی کی درخواست کریں۔",
-    "edit": "ترمیم کریں۔"
+    "edit": "ترمیم کریں۔",
+    "addMentorshipOpportunity": "رہنمائی شامل کریں۔",
+    "price":"قیمت:"
   },
   "Navbar":{
     "title":"InnovateHer",
@@ -61,7 +65,10 @@
     "email": "ای میل",
     "loginButton":"لاگ ان",
     "registerHere":"یہاں کلک کریں۔",
-    "noAccount":"رجسٹر کرنا چاہتے ہیں؟"
+    "noAccount":"رجسٹر کرنا چاہتے ہیں؟",
+    "role": "کردار کا انتخاب کریں:",
+    "buyer": "خریدار",
+    "seller": "بیچنے والا"
   },
   "Register": {
     "register":"سائن اپ کریں۔",
@@ -77,7 +84,16 @@
     "itemName": "آئٹم کا نام:",
     "itemPrice": "آئٹم کی قیمت:",
     "itemDescription": ":آئٹم کی قیمت",
-    "addItem":"نیا آئٹم شامل کریں۔"
+    "addItem":"نیا آئٹم شامل کریں۔",
+    "itemImage":"تصویر اپ لوڈ کریں:"
+  },
+  "editMarketplace": {
+    "editMarketplaceItem":"مارکیٹ پلیس آئٹم میں ترمیم کریں۔",
+    "itemName": "آئٹم کا نام:",
+    "itemPrice": "آئٹم کی قیمت:",
+    "itemDescription": ":آئٹم کی قیمت",
+    "addItem":"نیا آئٹم شامل کریں۔",
+    "itemImage": "تصویر تبدیل کریں:"
   },
   "addSkillBuilding":{
     "addSkillBuildingCourse": "سکل بلڈنگ کورس شامل کریں۔",
@@ -85,8 +101,19 @@
     "courseDuration": "دورانیہ:",
     "courseDescription": "تفصیل:",
     "addCourse": "نیا کورس شامل کریں۔",
-    "courseDifficulty": "Difficulty:",
-    "coursePrice": "Price:"
+    "courseDifficulty": "مشکل:",
+    "coursePrice": "قیمت:",
+    "itemImage": "تصویر اپ لوڈ کریں:"
+  },
+  "editSkillBuilding": {
+    "editSkillBuildingCourse": "اسکل بلڈنگ کورس میں ترمیم کریں۔",
+    "courseName": "کورس کا نام:",
+    "courseDuration": "دورانیہ:",
+    "courseDescription": "تفصیل:",
+    "addCourse": "نیا کورس شامل کریں۔",
+    "courseDifficulty": "مشکل:",
+    "coursePrice": "قیمت:",
+    "itemImage": "تصویر تبدیل کریں:"
   },
   "addNetworking":{
     "addNetworkingEvent": "نیٹ ورکنگ ایونٹ شامل کریں۔",
@@ -95,8 +122,18 @@
     "eventDescription": "تفصیل:",
     "eventLocation": "مقام:",
     "addEvent": "نیا واقعہ شامل کریں۔",
-    "eventPrice": "Price:",
-    "viewDetails":"View Details"
+    "eventPrice": "قیمت:",
+    "itemImage":"تصویر اپ لوڈ کریں:"
+  },
+  "editNetworking": {
+    "editNetworkingEvent": "نیٹ ورکنگ ایونٹ میں ترمیم کریں۔",
+    "eventName": "ایونٹ کا نام:",
+    "eventDate": "تاریخ:",
+    "eventDescription": "تفصیل:",
+    "eventLocation": "مقام:",
+    "addEvent": "نیا واقعہ شامل کریں۔",
+    "eventPrice": "قیمت:",
+    "itemImage":"تصویر تبدیل کریں:"
   },
   "addMentorship":{
     "addMentorshipOpportunity": "رہنمائی کا موقع شامل کریں۔",
@@ -105,7 +142,18 @@
     "mentorshipDuration": "دورانیہ:",
     "mentorshipDescription": "تفصیل:",
     "addMentorship": "نئی رہنمائی شامل کریں۔",
-    "mentorshipPrice": "Price:"
+    "mentorshipPrice": "قیمت:",
+    "itemImage": "تصویر اپ لوڈ کریں:"
+  },
+  "editMentorship":{
+    "editMentorshipOpportunity": "رہنمائی کے مواقع میں ترمیم کریں۔",
+    "mentorName": "نام:",
+    "mentorExpertise":"مہارت:",
+    "mentorshipDuration": "دورانیہ:",
+    "mentorshipDescription": "تفصیل:",
+    "addMentorship": "نئی رہنمائی شامل کریں۔",
+    "mentorshipPrice": "قیمت:",
+    "itemImage": "تصویر تبدیل کریں:"
   },
   "Profile":{
     "profile": "پروفائل",

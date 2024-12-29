@@ -109,16 +109,18 @@ export default function Marketplace() {
             {t('marketplace')}
           </motion.h2>
           <div className="mt-12 mb-8 text-center">
-            <Link href={`/${currentLocale}/${user.id}/marketplace/add`}>
-              <motion.button
-                className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('addMarketplaceItem')}
-              </motion.button>
-            </Link>
-          </div>
+  {session?.user?.currentRole === 'seller' && ( // Check if the user role is "seller"
+    <Link href={`/${currentLocale}/${user.id}/marketplace/add`}>
+      <motion.button
+        className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {t('addMarketplaceItem')}
+      </motion.button>
+    </Link>
+  )}
+</div>
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={containerVariants}
@@ -141,7 +143,8 @@ export default function Marketplace() {
       />
     </div>
     <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-    <p className="text-xl mb-6">{service.price} PKR</p>
+    <div className="text-lg mb-4">{service.description}</div>
+    <p className="text-2xl font-semibold mb-6">{service.price} PKR</p>
     {service.seller === session?.user?.id ? ( // Check if the service is owned by the current session user
       <div className="mt-auto flex gap-4">
         <Link href={`/${currentLocale}/${session.user.id}/marketplace/${service._id}/edit`}>

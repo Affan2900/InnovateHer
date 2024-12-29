@@ -2,6 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import dayjs from 'dayjs';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -76,7 +77,8 @@ export default function Networking() {
         return;
       }
   
-      router.push(`/${currentLocale}/${user.id}/networking`); // Refresh the page to update the list
+      // Update the local state to remove the deleted course
+      setEvents((prevEvents) => prevEvents.filter(event => event._id !== serviceId));
     } catch (err) {
       console.error('Error during deletion:', err.message);
     }
@@ -107,6 +109,7 @@ export default function Networking() {
       {t('networking')}
     </motion.h2>
     <div className="m-12 text-center">
+    {session?.user?.currentRole === 'seller' && (
       <Link href={`/${currentLocale}/${user.id}/networking/add`}>
         <motion.button
           className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
@@ -116,6 +119,7 @@ export default function Networking() {
           {t('addNetworkingEvent')}
         </motion.button>
       </Link>
+    )}
     </div>
     <motion.div
       className="space-y-8"
@@ -126,7 +130,7 @@ export default function Networking() {
       {events.map((event) => (
         <motion.div
           key={event._id}
-          className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl flex items-center space-x-6"
+          className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6"
           variants={itemVariants}
         >
           {/* Image Section */}
@@ -145,14 +149,14 @@ export default function Networking() {
             <h3 className="text-2xl font-bold mb-2">{event.title}</h3>
             <p className="text-lg mb-4">{event.description}</p>
             <div className="space-y-2">
-              <div className="flex items-center text-white text-opacity-80">
+              <div className="flex items-center text-white font-semibold text-opacity-100">
                 <Clock className="mr-3 text-white" size={24} />
-                <span>{event.date}</span>
+                <span>{dayjs(event.date).format('YYYY-MM-DD')}</span>
               </div>
-              <div className="flex items-center text-white text-opacity-80">
-                <p>{t('location')}: {event.location}</p>
+              <div className="flex font-semibold items-center text-white text-opacity-120 text-xl">
+                <p>{t('location')} {event.location}</p>
               </div>
-              <div className="flex items-center text-white text-opacity-80">
+              <div className="flex items-center font-semibold text-xl text-white text-opacity-100">
                 <p>{t('price')}: {event.price} PKR</p>
               </div>
             </div>

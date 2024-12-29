@@ -1,17 +1,19 @@
 // filepath: /D:/Semester 5/Web Engineering/innovateher/src/components/Profile.jsx
-'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { signOut, useSession } from 'next-auth/react'; // Import signOut and useSession from next-auth
 import { useTranslations } from 'next-intl';
 import { ChevronDown } from 'lucide-react';
 import useLocaleStore from '@/lib/store/useLocaleStore';
+import useRoleStore, { useSyncRoleWithSession } from '@/lib/store/useRoleStore'; // Import useRoleStore and useSyncRoleWithSession
 
-const Profile = ({ currentRole, onLogout, onChangeRole, userName }) => {
+const Profile = ({ userName }) => {
+  useSyncRoleWithSession(); // Sync role with session
   const { currentLocale } = useLocaleStore();
+  const { currentRole } = useRoleStore(); // Get current role from the Zustand store
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const router = useRouter();
   const t = useTranslations('Profile');
 
   // Get initials from userName
@@ -36,14 +38,13 @@ const Profile = ({ currentRole, onLogout, onChangeRole, userName }) => {
   }, []);
 
   const handleLogout = () => {
-    onLogout();
-    router.push(`/${currentLocale}`);
+    signOut({ callbackUrl: `/${currentLocale}` }); // Use signOut from next-auth
     setIsOpen(false);
   };
 
   const handleChangeRole = () => {
-    onChangeRole();
-    router.push(`/${currentLocale}/login`);
+    // Implement role change logic here
+    signOut({ callbackUrl: `/${currentLocale}/login` }); // Use signOut from next-auth
     setIsOpen(false);
   };
 
@@ -73,8 +74,8 @@ const Profile = ({ currentRole, onLogout, onChangeRole, userName }) => {
             transition={{ duration: 0.2 }}
           >
             {/* Current Role */}
-            <div className="bg-purple-600 px-4 py-2 text-white">
-              <p className="text-sm font-medium">Current Role: {currentRole}</p>
+            <div className="bg-purple-500 px-4 py-2 font-bold text-2xl text-white">
+              <p className="text-lg font-bold">Current Role: {currentRole}</p> {/* Updated CSS classes */}
             </div>
 
             {/* Dropdown Actions */}

@@ -4,13 +4,15 @@ import {motion} from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import LanguageToggle from './LanguageToggle'
-import { usePathname } from 'next/navigation'
+import useLocaleStore from '@/lib/store/useLocaleStore'
+import { useSession } from 'next-auth/react'
 
 
 const HeroNavbar = () => {
   const t = useTranslations("HeroNavbar")
-  const pathname = usePathname();
-  const currentLocale = pathname.split('/')[1] || 'en'; // Extract locale from path
+  const { currentLocale } = useLocaleStore()
+  const { data: session } = useSession()
+  const user = session?.user
 
   return (
     <motion.div
@@ -70,24 +72,50 @@ const HeroNavbar = () => {
             {t('heroSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link href={`/${currentLocale}/marketplace`}>
-              <motion.button
-                className="px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('exploreMarketplace')}
-              </motion.button>
-            </Link>
-            <Link href={`/${currentLocale}/skill-building`}>
-              <motion.button
-                className="px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('startLearning')}
-              </motion.button>
-            </Link>
+            { user ? (
+              <Link href={`/${currentLocale}/${user.id}/marketplace`}>
+                <motion.button
+                  className="px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {t('exploreMarketplace')}
+                </motion.button>
+              </Link>
+            ) : (
+              <Link href={`/${currentLocale}/marketplace`}>
+                <motion.button
+                  className="px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {t('exploreMarketplace')}
+                </motion.button>
+              </Link>
+            )}
+            
+            { user ? (
+              <Link href={`/${currentLocale}/${user.id}/skill-building`}>
+                <motion.button
+                  className="px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {t('startLearning')}
+                </motion.button>
+              </Link>
+            ) : (
+              <Link href={`/${currentLocale}/skill-building`}>
+                <motion.button
+                  className="px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {t('startLearning')}
+                </motion.button>
+              </Link>
+            )}
+            
           </div>
         </motion.div>
 
