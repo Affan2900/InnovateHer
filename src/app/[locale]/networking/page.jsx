@@ -3,12 +3,14 @@ import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, MapPin, Users } from 'lucide-react'
+import { Clock } from 'lucide-react'
 import FixedNavbar from '@/components/FixedNavbar'
 import LanguageToggle from '@/components/LanguageToggle'
 import useLocaleStore from '@/lib/store/useLocaleStore';
 import { useState, useEffect } from 'react'
 import { useSession} from 'next-auth/react';
+import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
 
 
 
@@ -17,8 +19,7 @@ export default function Networking() {
   const { currentLocale } = useLocaleStore();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { data: session } = useSession(); // Access session data
-  const user = session?.user; // Get user details from the session
+  const router = useRouter();
 
 
   useEffect(() => {
@@ -56,6 +57,11 @@ export default function Networking() {
     }
   }
 
+  const handleBuyNow =() => {
+      router.push(`/${currentLocale}/login`);
+    
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
@@ -83,17 +89,7 @@ export default function Networking() {
         </motion.h2>
 
         <div className="m-12 text-center">
-          { user ? (
-            <Link href={`/${currentLocale}/${user.id}/networking/add`}>
-            <motion.button 
-              className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {t('addNetworkingEvent')}
-            </motion.button>
-          </Link>
-          ) : (
+          
             <Link href={`/${currentLocale}/login`}>
               <motion.button 
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
@@ -103,64 +99,68 @@ export default function Networking() {
                 {t('addNetworkingEvent')}
               </motion.button>
             </Link>
-          )}
             
           </div>
         
-        {events.map((event, index) => (
-          <motion.div 
-            key={index}
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: index * 0.2 }}
-            className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg rounded-xl overflow-hidden flex flex-col md:flex-row shadow-xl"
-          >
-            <div className="md:w-2/3 p-6 flex flex-col justify-between">
-              <div>
-                <h3 className="text-3xl font-bold mb-4">
-                  {event.title}
-                </h3>
-                <p className="text-white text-opacity-80 mb-6">
-                  {event.description}
-                </p>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-center text-white text-opacity-80">
-                  <Calendar className="mr-3 text-white" size={24} />
-                  <span>{t('date')}: {dayjs(event.date).format('YYYY-MM-DD')}</span>
-                </div>
-                <div className="flex items-center text-white text-opacity-80">
-                  <MapPin className="mr-3 text-white" size={24} />
-                  <span>{event.location}</span>
-                </div>
-                <div className="flex items-center text-white text-opacity-80">
-                  <Users className="mr-3 text-white" size={24} />
-                  <span>{event.participants}  {t('participants')}</span>
-                </div>
-              </div>
-              
-              <Link href="/networking/register" className="mt-6">
-                <motion.button 
-                  className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {t('register')}
-                </motion.button>
-              </Link>
+          <motion.div
+  className="space-y-8"
+  variants={containerVariants}
+  initial="hidden"
+  animate="visible"
+>
+  {events.map((event) => (
+    <motion.div
+      key={event._id}
+      className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl flex flex-col space-y-6"
+      variants={itemVariants}
+    >
+      <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
+        {/* Image Section */}
+        <div className="flex-shrink-0">
+          <Image
+            src={event.imageUrl || '/default.jpg'}
+            width={200}
+            height={200}
+            className="w-48 h-48 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
+            alt={event.title}
+          />
+        </div>
+
+        {/* Event Details */}
+        <div className="flex-1">
+          <h3 className="text-2xl font-bold mb-2">{event.title}</h3>
+          <p className="text-lg mb-4">{event.description}</p>
+          <div className="space-y-2">
+            <div className="flex items-center text-white font-semibold text-opacity-100">
+              <Clock className="mr-3 text-white" size={24} />
+              <span>{dayjs(event.date).format('YYYY-MM-DD')}</span>
             </div>
-            <div className="md:w-1/3 relative">
-              <Image 
-                src={event.image} 
-                width={300} 
-                height={250}
-                className="w-full h-48 md:h-full object-cover"
-              />
+            <div className="flex font-semibold items-center text-white text-opacity-120 text-xl">
+              <p>{t('location')} {event.location}</p>
             </div>
-          </motion.div>
-        ))}
+            <div className="flex items-center font-semibold text-xl text-white text-opacity-100">
+              <p>{t('price')}: {event.price} PKR</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Actions - Now below the content */}
+      <div className="flex justify-end space-x-4">
+         
+            <motion.button
+              className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleBuyNow}
+            >
+              {t('viewDetails')}
+            </motion.button>
+
+      </div>
+    </motion.div>
+  ))}
+</motion.div>
       </div>
     </div>
     </>

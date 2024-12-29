@@ -88,17 +88,7 @@ export default function Marketplace() {
             {t('marketplace')}
           </motion.h2>
           <div className="mt-12 mb-8 text-center">
-          {user ? (
-  <Link href={`/${currentLocale}/${user.id}/marketplace/add`}>
-    <motion.button
-      className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {t('addMarketplaceItem')}
-    </motion.button>
-  </Link>
-) : (
+          
   <motion.button
     className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
     whileHover={{ scale: 1.05 }}
@@ -107,7 +97,6 @@ export default function Marketplace() {
   >
     {t('addMarketplaceItem')}
   </motion.button>
-)}
 
           </div>
           <motion.div
@@ -124,7 +113,7 @@ export default function Marketplace() {
               >
                 <div className="mb-6 overflow-hidden rounded-xl">
                   <Image
-                    src={service.image || '/images/default-service.jpg'} // Fallback image
+                    src={service.imageUrl || '/images/default-service.jpg'} // Fallback image
                     width={400}
                     height={300}
                     className="w-full h-64 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
@@ -132,8 +121,9 @@ export default function Marketplace() {
                   />
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-                <p className="text-xl mb-6">{service.price} PKR</p>
-                <Link href="/checkout" className="mt-auto">
+                <div className="text-lg  mb-4">{service.description}</div>
+                <p className="text-2xl mb-6">{service.price} PKR</p>
+                <Link href={`/${currentLocale}/login`} className="mt-auto">
                   <motion.button
                     className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
                     whileHover={{ scale: 1.05 }}

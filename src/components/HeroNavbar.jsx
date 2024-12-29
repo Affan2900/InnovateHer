@@ -3,7 +3,7 @@
 import {motion} from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import LanguageToggle from './LanguageToggle'
+import LanguageToggle from '@/components/LanguageToggle'
 import useLocaleStore from '@/lib/store/useLocaleStore'
 import { useSession } from 'next-auth/react'
 

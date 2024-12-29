@@ -17,6 +17,11 @@ const ServiceSchema = new mongoose.Schema(
         status: { type: String, enum: ["purchased", "registered"], required: true },
       },
     ], // List of customers who purchased/registered for the service
+    userCounts: {
+      type: Map,
+      of: Number,
+      default: {},
+    }, // Map to store the count of purchases for each user
   },
   { timestamps: true }
 );

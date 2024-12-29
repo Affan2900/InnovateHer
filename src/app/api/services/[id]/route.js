@@ -49,10 +49,26 @@ export async function POST(request, { params }) {
     // Convert serviceId to ObjectId if necessary
     const objectId = new ObjectId(serviceId);
 
+    // Find the service to check its category
+    const service = await servicesCollection.findOne({ _id: objectId });
+
+    if (!service) {
+      throw new Error('Service not found');
+    }
+
     // Update the service document to add the user to the customers array
+    const updateQuery = {
+      $addToSet: { customers: userId } // Use $addToSet to avoid duplicates
+    };
+
+    // If the service is of category "marketplace", increment a field for that user
+    if (service.category === 'marketplace') {
+      updateQuery.$inc = { [`userCounts.${userId}`]: 1 }; // Increment the user's count
+    }
+
     const result = await servicesCollection.updateOne(
       { _id: objectId },
-      { $addToSet: { customers: userId } } // Use $addToSet to avoid duplicates
+      updateQuery
     );
 
     console.log('Update result:', result);

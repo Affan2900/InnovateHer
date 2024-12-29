@@ -63,6 +63,28 @@ export default function Marketplace() {
     },
   };
 
+  const handleBuyNow = async (serviceId) => {
+    try {
+      const response = await fetch(`/api/services/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        console.error('Error adding user to customers array:', error);
+        return;
+      }
+
+      
+    } catch (err) {
+      console.error('Error during buy now:', err.message);
+    }
+  };
+
   const onDelete = async (serviceId) => {
 
     
@@ -145,52 +167,57 @@ export default function Marketplace() {
     <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
     <div className="text-lg mb-4">{service.description}</div>
     <p className="text-2xl font-semibold mb-6">{service.price} PKR</p>
-    {service.seller === session?.user?.id ? ( // Check if the service is owned by the current session user
-      <div className="mt-auto flex gap-4">
-        <Link href={`/${currentLocale}/${session.user.id}/marketplace/${service._id}/edit`}>
-          <motion.button
-            className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {t('edit')}
-          </motion.button>
-        </Link>
-        <motion.button
-          className="w-32 px-6 py-1 bg-red-600 text-white rounded-full text-xl font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onDelete(service._id)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
-            />
-          </svg>
-        </motion.button>
-      </div>
-    ) : (
-      <Link href="/checkout" className="mt-auto">
+  
+    {service.seller === session?.user?.id ? (
+  session?.user?.currentRole !== 'buyer' && (
+    <div className="mt-auto flex gap-4">
+      <Link href={`/${currentLocale}/${session.user.id}/marketplace/${service._id}/edit`}>
         <motion.button
           className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {t('buyNow')}
+          {t('edit')}
         </motion.button>
       </Link>
-    )}
+      <motion.button
+        className="w-32 px-6 py-1 bg-red-600 text-white rounded-full text-xl font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => onDelete(service._id)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+          />
+        </svg>
+      </motion.button>
+    </div>
+  )
+) : (
+  <motion.button
+    className="w-full px-6 py-3 mt-6 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => handleBuyNow(service._id)}
+  >
+    {t('buyNow')}
+  </motion.button>
+)}
+
+
   </motion.div>
 ))}
+
 
           </motion.div>
         </div>

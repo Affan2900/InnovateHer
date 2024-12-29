@@ -37,6 +37,28 @@ export default function Mentorship() {
     fetchMentors();
   }, []);
 
+  const handleBuyNow = async (serviceId) => {
+    try {
+      const response = await fetch(`/api/services/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        console.error('Error adding user to customers array:', error);
+        return;
+      }
+
+      
+    } catch (err) {
+      console.error('Error during buy now:', err.message);
+    }
+  };
+
   
 
   const containerVariants = {
@@ -82,15 +104,7 @@ export default function Mentorship() {
             {t('mentorship')}
           </motion.h2>
           <div className="m-12 text-center">
-            {user ? (<Link href={`/${currentLocale}/${user.id}/mentorship/add`}>
-              <motion.button
-                className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('addMentorshipOpportunity')}
-              </motion.button>
-            </Link>) : (
+            
               <Link href={`/${currentLocale}/login`}>
               <motion.button
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
@@ -100,7 +114,7 @@ export default function Mentorship() {
                 {t('addMentorshipOpportunity')}
               </motion.button>
             </Link>
-            )}
+
             
           </div>
           <motion.div
@@ -117,7 +131,7 @@ export default function Mentorship() {
               >
                 <div className="mb-6 overflow-hidden rounded-xl">
                   <Image
-                    src={mentor.image || '/images/default-mentor.jpg'} // Fallback image
+                    src={mentor.imageUrl || '/images/default-mentor.jpg'} // Fallback image
                     width={400}
                     height={400}
                     className="w-full h-64 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
@@ -127,7 +141,7 @@ export default function Mentorship() {
                 <h3 className="text-2xl font-bold mb-2">{mentor.title}</h3>
                 <p className="text-xl mb-4 text-white text-opacity-80">{mentor.expertise}</p>
                 <p className="text-md mb-6 text-white text-opacity-70">{mentor.description}</p>
-                <Link href="/mentorship/request" className="mt-auto">
+                <Link href={`/${currentLocale}/login`} className="mt-auto">
                   <motion.button
                     className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
                     whileHover={{ scale: 1.05 }}

@@ -17,6 +17,13 @@
     "aboutTitle": "About Us",
     "aboutDescription": "We are a dedicated team of innovators committed to crafting technology-driven solutions that address real-world challenges. With a focus on empowering rural women entrepreneurs, we specialize in developing culturally adaptive web applications that prioritize accessibility, usability, and inclusivity. Our expertise lies in navigating complex requirements, fostering collaboration among diverse stakeholders, and delivering impactful tools that bridge technological and societal gaps. By blending technical ingenuity with a deep understanding of community needs, we aim to drive sustainable growth and create meaningful opportunities for underrepresented groups."
   },
+  "Dashboard": {
+    "dashboard": "Dashboard",
+    "servicesOffered": "Services Offered",
+    "servicesBought": "Services Bought",
+    "price": "Price",
+    "category": "Category"
+  },
   "Marketplace": {
     "marketplace": "Marketplace",
     "buyNow": "Buy Now",
@@ -50,7 +57,8 @@
     "requestMentorship": "Request Mentorship",
     "addMentorshipOpportunity": "Add Mentorship",
     "edit": "Edit",
-    "price":"Price: "
+    "price":"Price: ",
+    "registered": "Already Registered"
   },
   "Navbar": {
     "title": "InnovateHer",

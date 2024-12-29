@@ -1,6 +1,6 @@
 // filepath: /D:/Semester 5/Web Engineering/innovateher/src/components/Profile.jsx
-import React, { useState, useRef, useEffect, use } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signOut, useSession } from 'next-auth/react'; // Import signOut and useSession from next-auth
 import { useTranslations } from 'next-intl';
@@ -15,6 +15,8 @@ const Profile = ({ userName }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const t = useTranslations('Profile');
+  const { data: session } = useSession();
+  const user = session?.user;
 
   // Get initials from userName
   const getInitials = (name) => {
@@ -80,6 +82,11 @@ const Profile = ({ userName }) => {
 
             {/* Dropdown Actions */}
             <div className="p-2 space-y-1">
+            <Link href={`/${currentLocale}/${user?.id}/dashboard`}>
+                <div className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-purple-50 rounded-md transition-colors">
+                  Dashboard
+                </div>
+              </Link>
               <button
                 className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-purple-50 rounded-md transition-colors"
                 onClick={handleChangeRole}

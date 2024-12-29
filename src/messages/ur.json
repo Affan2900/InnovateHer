@@ -10,6 +10,11 @@
     "impactStat3": "ثقافتی طور پر شامل ڈیزائن کے ساتھ خلا کو پورا کرنا",
     "scrollPrompt":"ہمارا مشن دیکھیں"
   },
+  "Dashboard": {
+    "dashboard": "ڈیش بورڈ",
+    "servicesOffered": "پیش کردہ خدمات",
+    "servicesBought": "خدمات خریدی گئیں۔"
+  },
   "Home":{
     "title": "InnovateHer",
     "missionTitle": "ہمارا مشن",
@@ -30,7 +35,8 @@
     "lessons": "مہارت کی تعمیر کا سبق",
     "addSkillBuildingCourse": "کورس شامل کریں۔",
     "price":"قیمت",
-    "edit": "ترمیم کریں۔"
+    "edit": "ترمیم کریں۔",
+    "registered": "پہلے سے رجسٹرڈ"
   },
   "Networking": {
     "networking": "نیٹ ورکنگ",
@@ -40,14 +46,16 @@
     "price":"قیمت: ",
     "location": "مقام: ",
     "addNetworkingEvent": "ایونٹ شامل کریں۔",
-    "edit": "ترمیم کریں۔"
+    "edit": "ترمیم کریں۔",
+    "registered": "پہلے سے رجسٹرڈ"
   },
   "Mentorship": {
     "mentorship": "سرپرستی",
     "requestMentorship": "رہنمائی کی درخواست کریں۔",
     "edit": "ترمیم کریں۔",
     "addMentorshipOpportunity": "رہنمائی شامل کریں۔",
-    "price":"قیمت:"
+    "price":"قیمت:",
+    "registered": "پہلے سے رجسٹرڈ"
   },
   "Navbar":{
     "title":"InnovateHer",

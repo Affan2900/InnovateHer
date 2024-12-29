@@ -62,6 +62,28 @@ export default function Mentorship() {
     }
   }
 
+  const handleBuyNow = async (serviceId) => {
+    try {
+      const response = await fetch(`/api/services/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        console.error('Error adding user to customers array:', error);
+        return;
+      }
+
+      
+    } catch (err) {
+      console.error('Error during buy now:', err.message);
+    }
+  };
+
   const onDelete = async (serviceId) => {
 
     
@@ -148,54 +170,65 @@ export default function Mentorship() {
     <p className="text-md mb-6 text-white font-semibold text-lg text-opacity-100">{mentor.duration}</p>
     <p className="text-md mb-6 text-white font-semibold text-lg text-opacity-100">{t('price')}{mentor.price}</p>
 
-    {mentor.seller === session?.user?.id ? ( // Check if the mentorship is owned by the current session user
-      <div className="mt-auto flex gap-4">
-        {/* Edit Button */}
-        <Link href={`/${currentLocale}/${session.user.id}/mentorship/${mentor._id}/edit`}>
+    {mentor.seller === session?.user?.id && session?.user?.currentRole === "buyer" ? null : (
+      mentor.seller === session?.user?.id ? ( // Check if the mentorship is owned by the current session user
+        <div className="mt-auto flex gap-4">
+          {/* Edit Button */}
+          <Link href={`/${currentLocale}/${session.user.id}/mentorship/${mentor._id}/edit`}>
+            <motion.button
+              className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t('edit')}
+            </motion.button>
+          </Link>
+          {/* Delete Button */}
           <motion.button
-            className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+            className="w-32 px-6 py-1 bg-red-600 text-white rounded-full text-xl font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => onDelete(mentor._id)}
           >
-            {t('edit')}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+              />
+            </svg>
           </motion.button>
-        </Link>
-        {/* Delete Button */}
-        <motion.button
-          className="w-32 px-6 py-1 bg-red-600 text-white rounded-full text-xl font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onDelete(mentor._id)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
+        </div>
+      ) : (
+        mentor.customers && mentor.customers.includes(session?.user?.id) ? (
+          <motion.button
+            className="w-full px-6 py-3 mt-6 bg-gray-400 text-white rounded-full text-xl font-semibold cursor-not-allowed"
+            disabled
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
-            />
-          </svg>
-        </motion.button>
-      </div>
-    ) : (
-      <Link href="/mentorship/request" className="mt-auto">
-        <motion.button 
-          className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {t('requestMentorship')}
-        </motion.button>
-      </Link>
+            {t('registered')}
+          </motion.button>
+        ) : (
+          <motion.button
+            className="w-full px-6 py-3 mt-6 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => handleBuyNow(mentor._id)}
+          >
+            {t('requestMentorship')}
+          </motion.button>
+        )
+      )
     )}
   </motion.div>
 ))}
+
 
             </motion.div>
         

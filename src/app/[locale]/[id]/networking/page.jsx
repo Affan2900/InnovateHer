@@ -187,62 +187,66 @@ export default function Networking() {
       </div>
 
       {/* Actions - Now below the content */}
-      <div className="flex justify-end space-x-4">
-        {event.seller === session?.user?.id ? (
-          <>
-            {/* Edit Button */}
-            <Link href={`/${currentLocale}/${session.user.id}/networking/${event._id}/edit`}>
-              <motion.button
-                className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t('edit')}
-              </motion.button>
-            </Link>
-            {/* Delete Button */}
-            <motion.button
-              className="px-4 py-2 bg-red-600 text-white rounded-full text-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onDelete(event._id)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
-                />
-              </svg>
-            </motion.button>
-          </>
-        ) : (
-          event.customers && event.customers.includes(session?.user?.id) ? (
-            <motion.button
-              className="px-6 py-3 bg-gray-400 text-white rounded-full text-xl font-semibold cursor-not-allowed"
-              disabled
-            >
-              {t('registered')}
-            </motion.button>
-          ) : (   
+<div className="flex justify-end space-x-4">
+  {/* Conditionally hide buttons based on user role and service ownership */}
+  {session?.user?.currentRole === "buyer" && event.seller === session?.user?.id ? null : (
+    <>
+      {event.seller === session?.user?.id ? (
+        <>
+          {/* Edit Button */}
+          <Link href={`/${currentLocale}/${session.user.id}/networking/${event._id}/edit`}>
             <motion.button
               className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => handleBuyNow(event._id)}
             >
-              {t('viewDetails')}
+              {t("edit")}
             </motion.button>
-          )
-        )}
-      </div>
+          </Link>
+          {/* Delete Button */}
+          <motion.button
+            className="px-4 py-2 bg-red-600 text-white rounded-full text-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onDelete(event._id)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+              />
+            </svg>
+          </motion.button>
+        </>
+      ) : event.customers && event.customers.includes(session?.user?.id) ? (
+        <motion.button
+          className="px-6 py-3 bg-gray-400 text-white rounded-full text-xl font-semibold cursor-not-allowed"
+          disabled
+        >
+          {t("registered")}
+        </motion.button>
+      ) : (
+        <motion.button
+          className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => handleBuyNow(event._id)}
+        >
+          {t("viewDetails")}
+        </motion.button>
+      )}
+    </>
+  )}
+</div>
+
     </motion.div>
   ))}
 </motion.div>

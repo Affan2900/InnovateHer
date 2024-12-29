@@ -16,8 +16,7 @@ export default function SkillBuilding() {
   const { currentLocale } = useLocaleStore();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { data: session } = useSession(); // Access session data
-  const user = session?.user;
+  
 
   useEffect(() => {
       const fetchServices = async () => {
@@ -81,17 +80,7 @@ export default function SkillBuilding() {
         </motion.h2>
 
         <div className="mt-12 text-center">
-          {user ? (
-            <Link href={`/${currentLocale}/${user.id}/skill-building/add`}>
-            <motion.button 
-              className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {t('addSkillBuildingCourse')}
-            </motion.button>
-          </Link>
-          ) : (
+          
             <Link href={`/${currentLocale}/login`}>
               <motion.button 
                 className="px-8 py-4 bg-white text-purple-700 rounded-full text-3xl font-extrabold hover:bg-purple-100 transition-colors"
@@ -101,7 +90,6 @@ export default function SkillBuilding() {
                 {t('addSkillBuildingCourse')}
               </motion.button>
             </Link>
-          )}
           </div>
         
         {courses.map((course, index) => (
@@ -138,7 +126,7 @@ export default function SkillBuilding() {
                 </div>
               </div>
               
-              <Link href="/skill-building/enroll" className="mt-6">
+              <Link href={`/${currentLocale}/login`} className="mt-6">
                 <motion.button 
                   className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
                   whileHover={{ scale: 1.05 }}
@@ -150,11 +138,11 @@ export default function SkillBuilding() {
             </div>
             <div className="md:w-1/3 relative">
               <Image 
-                src={course.imageUrl} 
+                src={course.imageUrl || '/default.jpg'} 
                 width={300} 
                 height={250}
                 className="w-full h-48 md:h-full object-cover"
-                alt={course.name}
+                alt={course.title}
               />
             </div>
           </motion.div>
