@@ -208,10 +208,11 @@ export default function SkillBuilding() {
     </div>
     <div className="md:w-1/3 relative">
       <Image 
-        src={course.image} 
+        src={course.imageUrl || '/default.jpg'} 
         width={300} 
         height={250}
         className="w-full h-48 md:h-full object-cover"
+        alt={course.title}
       />
     </div>
   </motion.div>

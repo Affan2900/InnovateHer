@@ -76,10 +76,10 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const body = await req.json(); // Parse the incoming request body
-    const { id, title, description, category, price, sellerId } = body;
+    const { id, title, description, category, price, sellerId, imageUrl } = body;
 
     // Validate input
-    if (!id || !title || !description || !category || !price || !sellerId) {
+    if (!id || !title || !description || !category || !price || !imageUrl || !sellerId) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
     }
 
@@ -93,6 +93,7 @@ export async function PUT(req) {
       title,
       description,
       category,
+      imageUrl,
       price: parseFloat(price), // Ensure price is stored as a number
       seller: sellerId, // Reference to the seller (user ID)
       updatedAt: new Date(),

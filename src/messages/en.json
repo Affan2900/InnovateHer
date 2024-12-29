@@ -89,7 +89,8 @@
     "itemName": "Item Name:",
     "itemPrice": "Item Price:",
     "itemDescription": "Item Description:",
-    "updateItem": "Update Item"
+    "updateItem": "Update Item",
+    "itemImage": "Change Image:"
   },
   "addSkillBuilding": {
     "addSkillBuildingCourse": "Add Skill Building Course",
@@ -98,7 +99,8 @@
     "courseDescription": "Description:",
     "addCourse": "Add New Course",
     "courseDifficulty": "Difficulty:",
-    "coursePrice": "Price:"
+    "coursePrice": "Price:",
+    "itemImage": "Upload Image:"
   },
   "editSkillBuilding": {
     "editSkillBuildingCourse": "Edit Skill Building Course",
@@ -107,7 +109,8 @@
     "courseDescription": "Description:",
     "updateCourse": "Update Course",
     "coursePrice": "Price:",
-    "courseDifficulty": "Difficulty:"
+    "courseDifficulty": "Difficulty:",
+    "itemImage": "Change Image:"
   },
   "addNetworking": {
     "addNetworkingEvent": "Add Networking Event",
@@ -116,7 +119,8 @@
     "eventDescription": "Description:",
     "eventLocation": "Location:",
     "addEvent": "Add New Event",
-    "eventPrice":"Price: "
+    "eventPrice":"Price: ",
+    "itemImage": "Upload Image:"
   },
   "editNetworking": {
     "editNetworkingEvent": "Edit Networking Event",
@@ -125,7 +129,8 @@
     "eventDescription": "Description:",
     "eventLocation": "Location:",
     "updateEvent": "Update Event",
-    "eventPrice": "Price:"
+    "eventPrice": "Price:",
+    "itemImage": "Change Image:"
   },
   "addMentorship": {
     "addMentorshipOpportunity": "Add Mentorship Opportunity",
@@ -134,7 +139,8 @@
     "mentorshipDuration": "Duration:",
     "mentorshipDescription": "Description",
     "addMentorship": "Add New Mentorship",
-    "mentorshipPrice": "Price:"
+    "mentorshipPrice": "Price:",
+    "itemImage": "Upload Image:"
   },
   "editMentorship": {
     "editMentorshipOpportunity": "Edit Mentorship Opportunity",
@@ -143,7 +149,8 @@
     "mentorshipDuration": "Duration:",
     "mentorshipDescription": "Description",
     "updateMentorship": "Update Mentorship",
-    "mentorshipPrice": "Price:"
+    "mentorshipPrice": "Price:",
+    "itemImage": "Change Image:"
   },
   "Profile": {
     "profile": "Profile",

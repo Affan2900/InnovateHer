@@ -35,10 +35,10 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { title, description, category, price, sellerId, date, location } = body;
+    const { title, description, imageUrl, category, price, sellerId, date, location } = body;
 
     // Validate input
-    if (!title || !description || !category || !price || !sellerId || !date || !location) {
+    if (!title || !description || !imageUrl || !category || !price || !sellerId || !date || !location) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
     }
 
@@ -67,6 +67,7 @@ export async function POST(req) {
       price: parseFloat(price),
       seller: sellerId,
       date: chosenDate,
+      imageUrl,
       location: location.trim(),
       customers: [],
       createdAt: new Date(),
@@ -111,6 +112,7 @@ export async function PUT(req) {
       location,
       description,
       category,
+      imageUrl,
       price: parseFloat(price), // Ensure price is stored as a number
       seller: sellerId, // Reference to the seller (user ID)
       updatedAt: new Date(),

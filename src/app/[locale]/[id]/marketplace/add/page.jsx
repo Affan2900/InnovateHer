@@ -82,7 +82,7 @@ export default function AddMarketplaceItem() {
       <div className="fixed top-28 right-8 z-40">
         <LanguageToggle />
       </div>
-      <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
+      <div className="min-h-screen mt-28 flex items-center justify-center bg-purple-50 p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
           <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('addMarketplaceItem')}</h2>
           {error && <p className="text-red-600 text-sm text-center">{error}</p>}

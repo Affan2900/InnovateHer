@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import { useRouter, useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import useLocaleStore from '@/lib/store/useLocaleStore';
+import Image from 'next/image';
+import { UploadButton } from "@/utils/uploadthing";
 
 export default function EditMentorshipOpportunity() {
   const t = useTranslations("editMentorship")
@@ -28,6 +30,14 @@ export default function EditMentorshipOpportunity() {
 
   useEffect(() => {
     const fetchService = async () => {
+
+      if (!user) {
+        setError('User not logged in.');
+        setLoading(false);
+        return;
+      }
+
+
       try {
         console.log(`Fetching service with ID: ${params.serviceId}`); // Debugging information
         const response = await fetch(`/api/services/${user.id}/mentorship?serviceId=${params.serviceId}`);
@@ -40,6 +50,7 @@ export default function EditMentorshipOpportunity() {
           description: service.description,
           expertise: service.expertise,
           duration: service.duration,
+          imageUrl: service.imageUrl,
         });
       } catch (error) {
         console.error('Error fetching service:', error.message);
@@ -71,6 +82,7 @@ export default function EditMentorshipOpportunity() {
       expertise: formData.expertise,
       duration: formData.duration,
       description: formData.description,
+      imageUrl: formData.imageUrl,
       price: formData.price, // Include price in the request body
       category: 'mentorship', // Use category extracted from the URL
       sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
@@ -89,7 +101,7 @@ export default function EditMentorshipOpportunity() {
         const { error } = await response.json();
         setError(error || 'Failed to update the item.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/marketplace`); // Redirect to marketplace
+        router.push(`/${currentLocale}/${user.id}/mentorship`); // Redirect to marketplace
       }
     } catch (err) {
       console.error('Error submitting form:', err.message);
@@ -176,6 +188,48 @@ export default function EditMentorshipOpportunity() {
                 onChange={handleChange}
               />
             </div>
+            <div>
+                        <label htmlFor="image" className="block text-sm font-medium text-gray-700">{t('itemImage')}</label>
+                        {formData.imageUrl && (
+                          <div className="mb-4">
+                            <Image
+                              src={formData.imageUrl}
+                              width={400}
+                              height={300}
+                              className="w-full h-64 object-cover rounded-xl"
+                              alt="Current Image"
+                            />
+                          </div>
+                        )}
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            console.log('Upload complete response:', res);
+                            if (!res) {
+                              console.log('No response received');
+                              return;
+                            }
+                            try {
+                              const fileUrl = res[0]?.url;
+                              console.log('File URL:', fileUrl);
+                              if (fileUrl) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  imageUrl: fileUrl
+                                }));
+                                console.log('Form data updated with URL:', fileUrl);
+                              } else {
+                                console.log('No file URL found in response');
+                              }
+                            } catch (err) {
+                              console.error('Error processing upload response:', err);
+                            }
+                          }}
+                          onUploadError={(error) => {
+                            alert(`Image upload failed: ${error.message}`);
+                          }}
+                        />
+                      </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

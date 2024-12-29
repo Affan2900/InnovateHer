@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import FixedNavbar from '@/components/FixedNavbar';
 import LanguageToggle from '@/components/LanguageToggle';
 import useLocaleStore from '@/lib/store/useLocaleStore';
+import { UploadButton } from "@/utils/uploadthing";
 
 export default function AddSkillBuildingCourse() {
   const t = useTranslations('addSkillBuilding');
@@ -25,6 +26,7 @@ export default function AddSkillBuildingCourse() {
     difficulty: '',
     price: '',
     description: '',
+    imageUrl: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -48,6 +50,7 @@ export default function AddSkillBuildingCourse() {
       difficulty: formData.difficulty,
       price: formData.price,
       description: formData.description,
+      imageUrl: formData.imageUrl,
       category, // Use category extracted from the URL
       sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
     };
@@ -81,7 +84,7 @@ export default function AddSkillBuildingCourse() {
       <div className="fixed top-28 right-8 z-40">
         <LanguageToggle />
       </div>
-      <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
+      <div className="min-h-screen flex mt-14 items-center justify-center bg-purple-50 p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
           <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('addSkillBuildingCourse')}</h2>
           {error && <p className="text-red-600 text-sm text-center">{error}</p>}
@@ -145,6 +148,51 @@ export default function AddSkillBuildingCourse() {
                 onChange={handleChange}
               />
             </div>
+            <div>
+                          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                            {t('itemImage')}
+                          </label>
+                          <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                // Log the complete response
+                console.log('Upload complete response:', res);
+                
+                // Check if we have a response at all
+                if (!res) {
+                  console.log('No response received');
+                  return;
+                }
+            
+                // Try to access the file URL safely
+                try {
+                  const fileUrl = res[0]?.url;  // Note: might be .url instead of .fileUrl
+                  console.log('File URL:', fileUrl);
+                  
+                  if (fileUrl) {
+                    setFormData(prev => ({
+                      ...prev,
+                      imageUrl: fileUrl
+                    }));
+                    console.log('Form data updated with URL:', fileUrl);
+                  } else {
+                    console.log('No file URL found in response');
+                  }
+                } catch (err) {
+                  console.error('Error processing upload response:', err);
+                }
+                
+                alert('Image uploaded successfully!');
+              }}
+              onUploadProgress={(progress) => {
+                console.log('Upload progress:', progress);
+              }}
+              onUploadError={(error) => {
+                console.error('Upload error:', error);
+                alert(`Image upload failed: ${error.message}`);
+              }}
+            />
+                        </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

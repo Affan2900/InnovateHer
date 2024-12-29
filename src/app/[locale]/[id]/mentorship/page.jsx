@@ -132,7 +132,7 @@ export default function Mentorship() {
   >
     <div className="mb-6 overflow-hidden rounded-xl">
       <Image 
-        src={mentor.image || '/images/default-service.jpg'} 
+        src={mentor.imageUrl || '/default.jpg'} 
         width={400} 
         height={400}
         className="w-full h-64 object-cover rounded-xl transition-transform duration-300 hover:scale-110"

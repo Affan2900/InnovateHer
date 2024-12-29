@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { useRouter, useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import useLocaleStore from '@/lib/store/useLocaleStore';
+import { UploadButton } from "@/utils/uploadthing";
+import Image from 'next/image';
 
 export default function EditNetworkingEvent() {
   const t = useTranslations("editNetworking");
@@ -22,6 +24,7 @@ export default function EditNetworkingEvent() {
     location: '',
     price: '',
     description: '',
+    imageUrl: '',
   });
 
   const [loading, setLoading] = useState(true);
@@ -49,6 +52,7 @@ export default function EditNetworkingEvent() {
           date: service.date,
           location: service.location,
           price: service.price,
+          imageUrl: service.imageUrl,
           description: service.description,
         });
       } catch (error) {
@@ -81,6 +85,7 @@ export default function EditNetworkingEvent() {
       date: formData.date,
       location: formData.location,
       price: formData.price,
+      imageUrl: formData.imageUrl,
       description: formData.description,
       category: 'networking', // Use category extracted from the URL
       sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
@@ -187,6 +192,48 @@ export default function EditNetworkingEvent() {
               onChange={handleChange}
             ></textarea>
           </div>
+          <div>
+                      <label htmlFor="image" className="block text-sm font-medium text-gray-700">{t('itemImage')}</label>
+                      {formData.imageUrl && (
+                        <div className="mb-4">
+                          <Image
+                            src={formData.imageUrl}
+                            width={400}
+                            height={300}
+                            className="w-full h-64 object-cover rounded-xl"
+                            alt="Current Image"
+                          />
+                        </div>
+                      )}
+                      <UploadButton
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                          console.log('Upload complete response:', res);
+                          if (!res) {
+                            console.log('No response received');
+                            return;
+                          }
+                          try {
+                            const fileUrl = res[0]?.url;
+                            console.log('File URL:', fileUrl);
+                            if (fileUrl) {
+                              setFormData(prev => ({
+                                ...prev,
+                                imageUrl: fileUrl
+                              }));
+                              console.log('Form data updated with URL:', fileUrl);
+                            } else {
+                              console.log('No file URL found in response');
+                            }
+                          } catch (err) {
+                            console.error('Error processing upload response:', err);
+                          }
+                        }}
+                        onUploadError={(error) => {
+                          alert(`Image upload failed: ${error.message}`);
+                        }}
+                      />
+                    </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

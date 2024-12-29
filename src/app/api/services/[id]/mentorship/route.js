@@ -32,10 +32,10 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json(); // Parse the incoming request body
-    const { title, expertise, duration, description, price, category, sellerId } = body;
+    const { title, expertise, duration, description, price, category, sellerId, imageUrl } = body;
 
     // Validate input
-    if (!title || !expertise || !duration || !description || !category || !price || !sellerId) {
+    if (!title || !expertise || !duration || !description || !imageUrl || !category || !price || !sellerId) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
     }
 
@@ -52,6 +52,7 @@ export async function POST(req) {
       duration,
       description,
       category,
+      imageUrl,
       price: parseFloat(price), // Ensure price is stored as a number
       seller: sellerId, // Reference to the seller (user ID)
       customers: [], // Default to an empty array for customers
@@ -74,10 +75,10 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const body = await req.json(); // Parse the incoming request body
-    const { id, title, expertise, duration, description, price, category, sellerId } = body;
+    const { id, title, expertise, duration, description, imageUrl, price, category, sellerId } = body;
 
     // Validate input
-    if (!id || !title || !expertise || !duration || !description || !category || !price || !sellerId) {
+    if (!id || !title || !expertise || !duration || !imageUrl || !description || !category || !price || !sellerId) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
     }
 
@@ -94,6 +95,7 @@ export async function PUT(req) {
       duration,
       description,
       category,
+      imageUrl,
       price: parseFloat(price), // Ensure price is stored as a number
       seller: sellerId, // Reference to the seller (user ID)
       updatedAt: new Date(),

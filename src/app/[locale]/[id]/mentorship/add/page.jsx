@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import FixedNavbar from '@/components/FixedNavbar';
 import LanguageToggle from '@/components/LanguageToggle';
 import useLocaleStore from '@/lib/store/useLocaleStore';
+import { UploadButton } from "@/utils/uploadthing";
 
 export default function AddMentorshipOpportunity() {
   const t = useTranslations("addMentorship")
@@ -23,6 +24,7 @@ export default function AddMentorshipOpportunity() {
     duration: '',
     description: '',
     price: '',
+    imageUrl: '',
   })
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -45,6 +47,7 @@ export default function AddMentorshipOpportunity() {
       expertise: formData.expertise,
       duration: formData.duration,
       description: formData.description,
+      imageUrl: formData.imageUrl,
       price: formData.price, // Include price in the request body
       category, // Use category extracted from the URL
       sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
@@ -74,7 +77,12 @@ export default function AddMentorshipOpportunity() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
+    <>
+    <FixedNavbar />
+      <div className="fixed top-28 right-8 z-40">
+        <LanguageToggle />
+      </div>
+    <div className="min-h-screen mt-28 flex items-center justify-center bg-purple-50 p-4">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -142,6 +150,51 @@ export default function AddMentorshipOpportunity() {
                 onChange={handleChange}
               />
             </div>
+            <div>
+                          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                            {t('itemImage')}
+                          </label>
+                          <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                // Log the complete response
+                console.log('Upload complete response:', res);
+                
+                // Check if we have a response at all
+                if (!res) {
+                  console.log('No response received');
+                  return;
+                }
+            
+                // Try to access the file URL safely
+                try {
+                  const fileUrl = res[0]?.url;  // Note: might be .url instead of .fileUrl
+                  console.log('File URL:', fileUrl);
+                  
+                  if (fileUrl) {
+                    setFormData(prev => ({
+                      ...prev,
+                      imageUrl: fileUrl
+                    }));
+                    console.log('Form data updated with URL:', fileUrl);
+                  } else {
+                    console.log('No file URL found in response');
+                  }
+                } catch (err) {
+                  console.error('Error processing upload response:', err);
+                }
+                
+                alert('Image uploaded successfully!');
+              }}
+              onUploadProgress={(progress) => {
+                console.log('Upload progress:', progress);
+              }}
+              onUploadError={(error) => {
+                console.error('Upload error:', error);
+                alert(`Image upload failed: ${error.message}`);
+              }}
+            />
+                        </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -154,6 +207,7 @@ export default function AddMentorshipOpportunity() {
         </form>
       </motion.div>
     </div>
+    </>
   )
 }
 
