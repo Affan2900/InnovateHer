@@ -30,7 +30,8 @@
     "lessons": "Skill Building Lesson",
     "addSkillBuildingCourse": "Add Course",
     "price":"Price:",
-    "edit": "Edit"
+    "edit": "Edit",
+    "registered": " Already Registered"
   },
   "Networking": {
     "networking": "Networking",

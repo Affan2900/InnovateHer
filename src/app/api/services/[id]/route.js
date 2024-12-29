@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getCollection } from '@/lib/connect';
+import { ObjectId } from 'mongodb';
 
 export async function GET(req) {
   const url = new URL(req.url);
@@ -32,5 +33,37 @@ export async function GET(req) {
   } catch (error) {
     console.error('Error fetching services:', error.message);
     return NextResponse.json({ error: 'Failed to fetch services' }, { status: 500 });
+  }
+}
+
+
+export async function POST(request, { params }) {
+  const userId = params.id;
+  const { serviceId } = await request.json(); // Extract serviceId from request body
+  const servicesCollection = await getCollection('services');
+
+  console.log('Received userId:', userId);
+  console.log('Received serviceId:', serviceId);
+
+  try {
+    // Convert serviceId to ObjectId if necessary
+    const objectId = new ObjectId(serviceId);
+
+    // Update the service document to add the user to the customers array
+    const result = await servicesCollection.updateOne(
+      { _id: objectId },
+      { $addToSet: { customers: userId } } // Use $addToSet to avoid duplicates
+    );
+
+    console.log('Update result:', result);
+
+    if (result.modifiedCount === 0) {
+      throw new Error('Failed to add user to customers array');
+    }
+
+    return NextResponse.json({ message: 'User added to customers array' }, { status: 200 });
+  } catch (error) {
+    console.error('Error updating service:', error.message);
+    return NextResponse.json({ error: 'Failed to update service' }, { status: 500 });
   }
 }

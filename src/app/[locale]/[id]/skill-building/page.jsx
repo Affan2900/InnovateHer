@@ -81,6 +81,28 @@ export default function SkillBuilding() {
       console.error('Error during deletion:', err.message);
     }
   };
+
+  const handleBuyNow = async (serviceId) => {
+    try {
+      const response = await fetch(`/api/services/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        console.error('Error adding user to customers array:', error);
+        return;
+      }
+
+      
+    } catch (err) {
+      console.error('Error during buy now:', err.message);
+    }
+  };
   
 
   if (loading) {
@@ -198,15 +220,23 @@ export default function SkillBuilding() {
       </div>
       
       ) : (
-        <Link href="/skill-building/enroll" className="mt-6">
-          <motion.button 
-            className="w-full px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {t('enrollNow')}
-          </motion.button>
-        </Link>
+        course.customers && course.customers.includes(session?.user?.id) ? (
+                    <motion.button
+                      className="w-full px-6 py-3 mt-6 bg-gray-400 text-white rounded-full text-xl font-semibold cursor-not-allowed"
+                      disabled
+                    >
+                      {t('registered')}
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      className="w-full px-6 py-3 mt-6 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleBuyNow(course._id)}
+                    >
+                      {t('enrollNow')}
+                    </motion.button>
+                  )
       )}
     </div>
     <div className="md:w-1/3 relative">
