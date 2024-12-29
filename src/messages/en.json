@@ -31,7 +31,7 @@
     "addSkillBuildingCourse": "Add Course",
     "price":"Price:",
     "edit": "Edit",
-    "registered": " Already Registered"
+    "registered": "Already Registered"
   },
   "Networking": {
     "networking": "Networking",
@@ -40,9 +40,10 @@
     "participants": "Participants",
     "addNetworkingEvent": "Add Event",
     "price":"Price: ",
-    "viewDetails":"View Details",
+    "viewDetails":"Register",
     "location": "Location: ",
-    "edit": "Edit"
+    "edit": "Edit",
+    "registered": "Already Registered"
   },
   "Mentorship": {
     "mentorship": "Mentorship",

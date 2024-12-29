@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { Roboto_Mono } from "@next/font/google";
+import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";

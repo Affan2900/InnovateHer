@@ -62,6 +62,28 @@ export default function Networking() {
     },
   };
 
+  const handleBuyNow = async (serviceId) => {
+    try {
+      const response = await fetch(`/api/services/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serviceId }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        console.error('Error adding user to customers array:', error);
+        return;
+      }
+
+      
+    } catch (err) {
+      console.error('Error during buy now:', err.message);
+    }
+  };
+
 
   const onDelete = async (serviceId) => {
 
@@ -122,98 +144,108 @@ export default function Networking() {
     )}
     </div>
     <motion.div
-      className="space-y-8"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+  className="space-y-8"
+  variants={containerVariants}
+  initial="hidden"
+  animate="visible"
+>
+  {events.map((event) => (
+    <motion.div
+      key={event._id}
+      className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl flex flex-col space-y-6"
+      variants={itemVariants}
     >
-      {events.map((event) => (
-        <motion.div
-          key={event._id}
-          className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6"
-          variants={itemVariants}
-        >
-          {/* Image Section */}
-          <div className="flex-shrink-0">
-            <Image
-              src={event.imageUrl || '/default.jpg'} // Use a default image if none is provided
-              width={200}
-              height={200}
-              className="w-48 h-48 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
-              alt={event.title}
-            />
-          </div>
+      <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
+        {/* Image Section */}
+        <div className="flex-shrink-0">
+          <Image
+            src={event.imageUrl || '/default.jpg'}
+            width={200}
+            height={200}
+            className="w-48 h-48 object-cover rounded-xl transition-transform duration-300 hover:scale-110"
+            alt={event.title}
+          />
+        </div>
 
-          {/* Event Details */}
-          <div className="flex-1">
-            <h3 className="text-2xl font-bold mb-2">{event.title}</h3>
-            <p className="text-lg mb-4">{event.description}</p>
-            <div className="space-y-2">
-              <div className="flex items-center text-white font-semibold text-opacity-100">
-                <Clock className="mr-3 text-white" size={24} />
-                <span>{dayjs(event.date).format('YYYY-MM-DD')}</span>
-              </div>
-              <div className="flex font-semibold items-center text-white text-opacity-120 text-xl">
-                <p>{t('location')} {event.location}</p>
-              </div>
-              <div className="flex items-center font-semibold text-xl text-white text-opacity-100">
-                <p>{t('price')}: {event.price} PKR</p>
-              </div>
+        {/* Event Details */}
+        <div className="flex-1">
+          <h3 className="text-2xl font-bold mb-2">{event.title}</h3>
+          <p className="text-lg mb-4">{event.description}</p>
+          <div className="space-y-2">
+            <div className="flex items-center text-white font-semibold text-opacity-100">
+              <Clock className="mr-3 text-white" size={24} />
+              <span>{dayjs(event.date).format('YYYY-MM-DD')}</span>
+            </div>
+            <div className="flex font-semibold items-center text-white text-opacity-120 text-xl">
+              <p>{t('location')} {event.location}</p>
+            </div>
+            <div className="flex items-center font-semibold text-xl text-white text-opacity-100">
+              <p>{t('price')}: {event.price} PKR</p>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Actions */}
-          <div className="flex flex-col space-y-4">
-            {event.seller === session?.user?.id ? (
-              <>
-                {/* Edit Button */}
-                <Link href={`/${currentLocale}/${session.user.id}/networking/${event._id}/edit`}>
-                  <motion.button
-                    className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {t('edit')}
-                  </motion.button>
-                </Link>
-                {/* Delete Button */}
-                <motion.button
-                  className="px-4 py-2 bg-red-600 text-white rounded-full text-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => onDelete(event._id)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
-                    />
-                  </svg>
-                </motion.button>
-              </>
-            ) : (
-              <Link href={`/networking/${event._id}`}>
-                <motion.button
-                  className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {t('viewDetails')}
-                </motion.button>
-              </Link>
-            )}
-          </div>
-        </motion.div>
-      ))}
+      {/* Actions - Now below the content */}
+      <div className="flex justify-end space-x-4">
+        {event.seller === session?.user?.id ? (
+          <>
+            {/* Edit Button */}
+            <Link href={`/${currentLocale}/${session.user.id}/networking/${event._id}/edit`}>
+              <motion.button
+                className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {t('edit')}
+              </motion.button>
+            </Link>
+            {/* Delete Button */}
+            <motion.button
+              className="px-4 py-2 bg-red-600 text-white rounded-full text-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onDelete(event._id)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7L5 7M10 11V17M14 11V17M4 7L4 19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V7M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+                />
+              </svg>
+            </motion.button>
+          </>
+        ) : (
+          event.customers && event.customers.includes(session?.user?.id) ? (
+            <motion.button
+              className="px-6 py-3 bg-gray-400 text-white rounded-full text-xl font-semibold cursor-not-allowed"
+              disabled
+            >
+              {t('registered')}
+            </motion.button>
+          ) : (   
+            <motion.button
+              className="px-4 py-2 bg-white text-purple-700 rounded-full text-lg font-semibold hover:bg-purple-100 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleBuyNow(event._id)}
+            >
+              {t('viewDetails')}
+            </motion.button>
+          )
+        )}
+      </div>
     </motion.div>
+  ))}
+</motion.div>
   </div>
 </div>
 
