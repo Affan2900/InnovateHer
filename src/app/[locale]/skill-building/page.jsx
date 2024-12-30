@@ -10,6 +10,7 @@ import LanguageToggle from '@/components/LanguageToggle'
 import useLocaleStore from '@/lib/store/useLocaleStore';
 import { useEffect, useState } from 'react'
 import { useSession} from 'next-auth/react';
+import Footer from '@/components/Footer';
 
 export default function SkillBuilding() {
   const t = useTranslations("Skill Building")
@@ -67,7 +68,7 @@ export default function SkillBuilding() {
     <div className="fixed top-28 right-8 z-40">
                 <LanguageToggle />
               </div>
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white ">
       
       <div className="container mx-auto max-w-4xl space-y-8 pt-32">
         <motion.h2 
@@ -150,6 +151,7 @@ export default function SkillBuilding() {
         
       </div>
     </div>
+    <Footer />
     </>
   )
 }

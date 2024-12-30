@@ -10,6 +10,7 @@ import FixedNavbar from '@/components/FixedNavbar';
 import { useEffect, useState } from 'react';
 import { useSession} from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Footer from '@/components/Footer';
 
 
 export default function Marketplace() {
@@ -137,6 +138,7 @@ export default function Marketplace() {
           </motion.div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

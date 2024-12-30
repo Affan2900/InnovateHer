@@ -99,6 +99,13 @@ export async function PUT(req) {
       return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
     }
 
+    // Check if the chosen date is equal to or greater than the current date
+    const chosenDate = new Date(date);
+    const currentDate = new Date();
+    if (chosenDate < currentDate) {
+      return NextResponse.json({ error: 'The chosen date must be equal to or greater than the current date.' }, { status: 400 });
+    }
+
     // Get the "services" collection
     const servicesCollection = await getCollection('services');
     if (!servicesCollection) {

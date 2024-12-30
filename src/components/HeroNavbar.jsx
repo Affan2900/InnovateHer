@@ -7,7 +7,6 @@ import LanguageToggle from '@/components/LanguageToggle'
 import useLocaleStore from '@/lib/store/useLocaleStore'
 import { useSession } from 'next-auth/react'
 
-
 const HeroNavbar = () => {
   const t = useTranslations("HeroNavbar")
   const { currentLocale } = useLocaleStore()
@@ -47,35 +46,39 @@ const HeroNavbar = () => {
         }}
       />
 
+      {/* Navbar */}
       <div className="absolute top-0 left-0 right-0 bg-transparent z-50 p-4">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 px-4">
           <Link href="/">
-            <span className="text-3xl font-black">{t('title')}</span>
+            <span className="text-2xl sm:text-3xl font-black">{t('title')}</span>
           </Link>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center">
             <LanguageToggle />
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-8 sm:py-12 flex flex-col lg:flex-row items-center justify-between space-y-8 lg:space-y-0">
+        {/* Left Column - Hero Text */}
         <motion.div
-          className="text-center lg:text-left lg:w-1/2 mb-8 lg:mb-0"
+          className="text-center lg:text-left lg:w-1/2 space-y-6"
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">
             {t('title')}
           </h1>
-          <p className="text-xl lg:text-2xl mb-8">
+          <p className="text-lg sm:text-xl lg:text-2xl">
             {t('heroSubtitle')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            {/* CTA Buttons */}
             { user ? (
-              <Link href={`/${currentLocale}/${user.id}/marketplace`}>
+              <Link href={`/${currentLocale}/${user.id}/marketplace`} className="w-full sm:w-auto">
                 <motion.button
-                  className="px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+                  className="w-full sm:w-auto px-6 py-3 bg-white text-purple-700 rounded-full text-lg sm:text-xl font-semibold hover:bg-purple-100 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -83,9 +86,9 @@ const HeroNavbar = () => {
                 </motion.button>
               </Link>
             ) : (
-              <Link href={`/${currentLocale}/marketplace`}>
+              <Link href={`/${currentLocale}/marketplace`} className="w-full sm:w-auto">
                 <motion.button
-                  className="px-6 py-3 bg-white text-purple-700 rounded-full text-xl font-semibold hover:bg-purple-100 transition-colors"
+                  className="w-full sm:w-auto px-6 py-3 bg-white text-purple-700 rounded-full text-lg sm:text-xl font-semibold hover:bg-purple-100 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -95,9 +98,9 @@ const HeroNavbar = () => {
             )}
             
             { user ? (
-              <Link href={`/${currentLocale}/${user.id}/skill-building`}>
+              <Link href={`/${currentLocale}/${user.id}/skill-building`} className="w-full sm:w-auto">
                 <motion.button
-                  className="px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
+                  className="w-full sm:w-auto px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-lg sm:text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -105,9 +108,9 @@ const HeroNavbar = () => {
                 </motion.button>
               </Link>
             ) : (
-              <Link href={`/${currentLocale}/skill-building`}>
+              <Link href={`/${currentLocale}/skill-building`} className="w-full sm:w-auto">
                 <motion.button
-                  className="px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
+                  className="w-full sm:w-auto px-6 py-3 bg-transparent border-2 border-white text-white rounded-full text-lg sm:text-xl font-semibold hover:bg-white hover:text-purple-700 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -115,44 +118,44 @@ const HeroNavbar = () => {
                 </motion.button>
               </Link>
             )}
-            
           </div>
         </motion.div>
 
+        {/* Right Column - Impact Stats */}
         <motion.div
-          className="lg:w-1/2 lg:pl-8"
+          className="lg:w-1/2 lg:pl-8 w-full px-4"
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.8 }}
         >
-          <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl">
-            <h2 className="text-3xl font-bold mb-4">{t('impactTitle')}</h2>
+          <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-4 sm:p-6 shadow-xl">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">{t('impactTitle')}</h2>
             <ul className="space-y-4">
               <motion.li
-                className="flex items-center space-x-3"
+                className="flex items-center space-x-3 text-sm sm:text-base"
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 1, duration: 0.5 }}
               >
-                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span>{t('impactStat1')}</span>
               </motion.li>
               <motion.li
-                className="flex items-center space-x-3"
+                className="flex items-center space-x-3 text-sm sm:text-base"
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 1.2, duration: 0.5 }}
               >
-                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span>{t('impactStat2')}</span>
               </motion.li>
               <motion.li
-                className="flex items-center space-x-3"
+                className="flex items-center space-x-3 text-sm sm:text-base"
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 1.4, duration: 0.5 }}
               >
-                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span>{t('impactStat3')}</span>
               </motion.li>
             </ul>
@@ -160,8 +163,9 @@ const HeroNavbar = () => {
         </motion.div>
       </div>
 
+      {/* Scroll Prompt */}
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-lg"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-lg"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 10, 0] }}
         transition={{ delay: 2, duration: 2, repeat: Infinity }}
@@ -173,4 +177,3 @@ const HeroNavbar = () => {
 }
 
 export default HeroNavbar
-

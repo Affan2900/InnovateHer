@@ -170,5 +170,8 @@
     "profile": "Profile",
     "logout": "Logout",
     "changeRole": "Change Role"
+  },
+  "Footer": {
+    "description": "Empowering ideas, creating opportunities."
   }
 }

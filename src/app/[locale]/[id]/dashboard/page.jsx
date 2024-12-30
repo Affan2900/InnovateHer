@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
+import Footer from '@/components/Footer';
 import FixedNavbar from '@/components/FixedNavbar';
 import LanguageToggle from '@/components/LanguageToggle';
 import useLocaleStore from '@/lib/store/useLocaleStore';
@@ -122,6 +122,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

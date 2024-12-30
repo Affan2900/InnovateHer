@@ -12,6 +12,7 @@ import FixedNavbar from '@/components/FixedNavbar';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import { Clock } from 'lucide-react'; 
+import Footer from '@/components/Footer';
 
 export default function Networking() {
   const t = useTranslations("Networking");
@@ -252,6 +253,7 @@ export default function Networking() {
 </motion.div>
   </div>
 </div>
+<Footer/>
 
     </>
   );

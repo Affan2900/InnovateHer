@@ -10,6 +10,7 @@ import FixedNavbar from '@/components/FixedNavbar';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import { TrendingUp, BookOpen, Clock } from 'lucide-react'; // Import Clock from lucide-react
+import Footer from '@/components/Footer';
 
 
 
@@ -255,6 +256,7 @@ export default function SkillBuilding() {
 
       </div>
     </div>
+    <Footer/>
     </>
   )
 }

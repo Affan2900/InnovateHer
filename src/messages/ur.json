@@ -13,7 +13,9 @@
   "Dashboard": {
     "dashboard": "ڈیش بورڈ",
     "servicesOffered": "پیش کردہ خدمات",
-    "servicesBought": "خدمات خریدی گئیں۔"
+    "servicesBought": "خدمات خریدی گئیں۔",
+    "price": "قیمت",
+    "category": "قسم"
   },
   "Home":{
     "title": "InnovateHer",
@@ -91,7 +93,7 @@
     "addMarketplaceItem":"مارکیٹ پلیس آئٹم شامل کریں۔",
     "itemName": "آئٹم کا نام:",
     "itemPrice": "آئٹم کی قیمت:",
-    "itemDescription": ":آئٹم کی قیمت",
+    "itemDescription": "آئٹم کی تفصیل:",
     "addItem":"نیا آئٹم شامل کریں۔",
     "itemImage":"تصویر اپ لوڈ کریں:"
   },
@@ -99,8 +101,8 @@
     "editMarketplaceItem":"مارکیٹ پلیس آئٹم میں ترمیم کریں۔",
     "itemName": "آئٹم کا نام:",
     "itemPrice": "آئٹم کی قیمت:",
-    "itemDescription": ":آئٹم کی قیمت",
-    "addItem":"نیا آئٹم شامل کریں۔",
+    "itemDescription": "آئٹم کی تفصیل:",
+    "updateItem":"آئٹم کو اپ ڈیٹ کریں۔",
     "itemImage": "تصویر تبدیل کریں:"
   },
   "addSkillBuilding":{
@@ -118,7 +120,7 @@
     "courseName": "کورس کا نام:",
     "courseDuration": "دورانیہ:",
     "courseDescription": "تفصیل:",
-    "addCourse": "نیا کورس شامل کریں۔",
+    "updateCourse": "کورس کو اپ ڈیٹ کریں۔",
     "courseDifficulty": "مشکل:",
     "coursePrice": "قیمت:",
     "itemImage": "تصویر تبدیل کریں:"
@@ -139,7 +141,7 @@
     "eventDate": "تاریخ:",
     "eventDescription": "تفصیل:",
     "eventLocation": "مقام:",
-    "addEvent": "نیا واقعہ شامل کریں۔",
+    "updateEvent": "ایونٹ کو اپ ڈیٹ کریں۔",
     "eventPrice": "قیمت:",
     "itemImage":"تصویر تبدیل کریں:"
   },
@@ -159,7 +161,7 @@
     "mentorExpertise":"مہارت:",
     "mentorshipDuration": "دورانیہ:",
     "mentorshipDescription": "تفصیل:",
-    "addMentorship": "نئی رہنمائی شامل کریں۔",
+    "updateMentorship": "رہنمائی کو اپ ڈیٹ کریں۔",
     "mentorshipPrice": "قیمت:",
     "itemImage": "تصویر تبدیل کریں:"
   },
@@ -167,5 +169,8 @@
     "profile": "پروفائل",
     "logout": "لاگ آؤٹ",
     "changeRole": "کردار تبدیل کریں۔"
+  },
+  "Footer": {
+    "description": "خیالات کو بااختیار بنانا، مواقع پیدا کرنا۔"
   }
 }

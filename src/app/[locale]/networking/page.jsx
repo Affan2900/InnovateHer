@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react'
 import { useSession} from 'next-auth/react';
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
+import Footer from '@/components/Footer';
 
 
 
@@ -163,6 +164,7 @@ export default function Networking() {
 </motion.div>
       </div>
     </div>
+    <Footer/>
     </>
   )
 }

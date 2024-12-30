@@ -10,6 +10,7 @@ import useLocaleStore from '@/lib/store/useLocaleStore';
 import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Footer from '@/components/Footer'
 
 export default function Mentorship() {
   const t = useTranslations("Mentorship")
@@ -234,6 +235,7 @@ export default function Mentorship() {
         
       </div>
     </div>
+    <Footer />
     </>
   )
 }

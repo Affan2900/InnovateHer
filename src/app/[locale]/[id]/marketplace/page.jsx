@@ -10,6 +10,7 @@ import FixedNavbar from '@/components/FixedNavbar';
 import { useEffect, useState } from 'react';
 import {  useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
+import Footer from '@/components/Footer';
 
 export default function Marketplace() {
   const t = useTranslations("Marketplace");
@@ -120,7 +121,7 @@ export default function Marketplace() {
       <div className="fixed top-28 right-8 z-40">
         <LanguageToggle />
       </div>
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 text-white">
+      <div className="min-h-screen bg-gradient-to-br  from-purple-600 via-indigo-600 to-blue-700 text-white">
         <div className="container mx-auto max-w-7xl px-8 pt-32 pb-8">
           <motion.h2
             className="text-5xl font-bold mb-12 text-center"
@@ -222,6 +223,7 @@ export default function Marketplace() {
           </motion.div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

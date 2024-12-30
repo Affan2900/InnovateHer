@@ -10,6 +10,7 @@ import useLocaleStore from '@/lib/store/useLocaleStore';
 import { useState, useEffect } from 'react';
 import { useSession} from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Footer from '@/components/Footer';
 
 export default function Mentorship() {
   const t = useTranslations("Mentorship");
@@ -155,6 +156,7 @@ export default function Mentorship() {
           </motion.div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import HeroNavbar from '@/components/HeroNavbar'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   const [showNavbar, setShowNavbar] = useState(false)
@@ -103,6 +104,7 @@ export default function Home() {
     </div>
   </div>
 </section>
+      <Footer />
     </div>
   )
 }
