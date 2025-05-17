@@ -1,11 +1,10 @@
-// filepath: /d:/Semester 5/Web Engineering/innovateher/src/app/[locale]/[id]/marketplace/[serviceId]/edit/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useRouter, useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
+import { useSession } from 'next-auth/react';
 import useLocaleStore from '@/lib/store/useLocaleStore';
 import { UploadButton } from "@/utils/uploadthing";
 import Image from 'next/image';
@@ -36,11 +35,9 @@ export default function EditMarketplaceItem() {
         return;
       }
       try {
-        console.log(`Fetching service with ID: ${params.serviceId}`); // Debugging information
         const response = await fetch(`/api/services/${user.id}/marketplace?serviceId=${params.serviceId}`);
         if (!response.ok) throw new Error('Failed to fetch service');
         const data = await response.json();
-        console.log('Fetched service data:', data); // Debugging information
         const service = data.service;
         if (!service) {
           throw new Error('Service not found');
@@ -52,7 +49,6 @@ export default function EditMarketplaceItem() {
           imageUrl: service.imageUrl,
         });
       } catch (error) {
-        console.error('Error fetching service:', error.message);
         setError('Failed to fetch service data.');
       } finally {
         setLoading(false);
@@ -81,8 +77,8 @@ export default function EditMarketplaceItem() {
       price: formData.price,
       description: formData.description,
       imageUrl: formData.imageUrl,
-      category: 'marketplace', // Use category extracted from the URL
-      sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
+      category: 'marketplace',
+      sellerId: session?.user?.id,
     };
 
     try {
@@ -94,14 +90,14 @@ export default function EditMarketplaceItem() {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const { error } = await response.json();
-        setError(error || 'Failed to update the item.');
+        setError(data.error || 'Failed to update the item.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/marketplace`); // Redirect to marketplace
+        router.push(`/${currentLocale}/${user.id}/marketplace`);
       }
     } catch (err) {
-      console.error('Error submitting form:', err.message);
       setError('An unexpected error occurred.');
     } finally {
       setLoading(false);
@@ -125,7 +121,12 @@ export default function EditMarketplaceItem() {
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('editMarketplaceItem')}</h2>
-        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+            <p className="font-bold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('itemName')}</label>
@@ -146,10 +147,13 @@ export default function EditMarketplaceItem() {
               id="price"
               name="price"
               required
+              min={1}
+              max={10000}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               value={formData.price}
               onChange={handleChange}
             />
+            <span className="text-xs text-gray-500">Allowed range: 1 to 10,000</span>
           </div>
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('itemDescription')}</label>
@@ -178,29 +182,21 @@ export default function EditMarketplaceItem() {
             <UploadButton
               endpoint="imageUploader"
               onClientUploadComplete={(res) => {
-                console.log('Upload complete response:', res);
-                if (!res) {
-                  console.log('No response received');
-                  return;
-                }
+                if (!res) return;
                 try {
                   const fileUrl = res[0]?.url;
-                  console.log('File URL:', fileUrl);
                   if (fileUrl) {
                     setFormData(prev => ({
                       ...prev,
                       imageUrl: fileUrl
                     }));
-                    console.log('Form data updated with URL:', fileUrl);
-                  } else {
-                    console.log('No file URL found in response');
                   }
                 } catch (err) {
-                  console.error('Error processing upload response:', err);
+                  setError('Error processing upload response.');
                 }
               }}
               onUploadError={(error) => {
-                alert(`Image upload failed: ${error.message}`);
+                setError(`Image upload failed: ${error.message}`);
               }}
             />
           </div>
@@ -209,6 +205,7 @@ export default function EditMarketplaceItem() {
             whileTap={{ scale: 0.95 }}
             type="submit"
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+            disabled={loading}
           >
             {t('updateItem')}
           </motion.button>

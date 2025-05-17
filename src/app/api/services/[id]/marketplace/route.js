@@ -1,6 +1,20 @@
 import { NextResponse } from 'next/server';
-import { getCollection } from '@/lib/connect'; // Helper to connect to MongoDB
+import { getCollection } from '@/lib/connect';
 import { ObjectId } from 'mongodb';
+import { z } from 'zod';
+
+// Zod schema for marketplace service
+const serviceSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  category: z.enum(["marketplace", "skill-building", "mentorship", "networking"]),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .min(1, { message: "Price is out of range. Allowed range is 1 to 10,000." })
+    .max(10000, { message: "Price is out of range. Allowed range is 1 to 10,000." }),
+  sellerId: z.string().min(1, "Seller ID is required"),
+  imageUrl: z.string().min(1, "Image URL is required"),
+});
 
 export async function GET(req) {
   try {
@@ -28,41 +42,44 @@ export async function GET(req) {
   }
 }
 
-
-
 export async function POST(req) {
   try {
-    const body = await req.json(); // Parse the incoming request body
-    const { title, description, category, price, sellerId, imageUrl } = body;
+    const body = await req.json();
 
-    console.log('Received data:', { title, description, category, price, sellerId, imageUrl });
+    // Convert price to number if it comes as a string
+    if (typeof body.price === "string") body.price = Number(body.price);
 
-    // Validate input
-    if (!title || !description || !imageUrl || !category || !price || !sellerId) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
+    // Use safeParse instead of parse to get a result object
+    const result = serviceSchema.safeParse(body);
+    if (!result.success) {
+      // Return the first validation error
+      return NextResponse.json(
+        { error: result.error.issues[0].message },
+        { status: 400 }
+      );
     }
 
-    // Get the "services" collection
+    const { title, description, category, price, sellerId, imageUrl } = result.data;
+
     const servicesCollection = await getCollection('services');
     if (!servicesCollection) {
       return NextResponse.json({ error: 'Failed to connect to the database.' }, { status: 500 });
     }
 
-    // Insert new service
     const newService = {
       title,
       description,
       category,
       imageUrl,
-      price: parseFloat(price), // Ensure price is stored as a number
-      seller: sellerId, // Reference to the seller (user ID)
+      price,
+      seller: sellerId,
       customers: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.insertOne(newService);
-    if (!result.acknowledged) {
+    const insertResult = await servicesCollection.insertOne(newService);
+    if (!insertResult.acknowledged) {
       return NextResponse.json({ error: 'Failed to add service.' }, { status: 500 });
     }
 
@@ -75,36 +92,48 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
-    const body = await req.json(); // Parse the incoming request body
-    const { id, title, description, category, price, sellerId, imageUrl } = body;
+    const body = await req.json();
 
-    // Validate input
-    if (!id || !title || !description || !category || !price || !imageUrl || !sellerId) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
+    // Convert price to number if it comes as a string
+    if (typeof body.price === "string") body.price = Number(body.price);
+
+    // Validate input using Zod
+    const result = serviceSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error.errors[0].message },
+        { status: 400 }
+      );
     }
 
-    // Get the "services" collection
+    const { title, description, category, price, sellerId, imageUrl } = result.data;
+    const { id } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Service ID is required.' }, { status: 400 });
+    }
+
     const servicesCollection = await getCollection('services');
     if (!servicesCollection) {
       return NextResponse.json({ error: 'Failed to connect to the database.' }, { status: 500 });
     }
-    // Update the service
+
     const updatedService = {
       title,
       description,
       category,
       imageUrl,
-      price: parseFloat(price), // Ensure price is stored as a number
-      seller: sellerId, // Reference to the seller (user ID)
+      price,
+      seller: sellerId,
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.updateOne(
+    const updateResult = await servicesCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: updatedService }
     );
 
-    if (result.modifiedCount === 0) {
+    if (updateResult.modifiedCount === 0) {
       return NextResponse.json({ error: 'Failed to update service.' }, { status: 500 });
     }
 
@@ -120,18 +149,15 @@ export async function DELETE(req) {
     const { searchParams } = new URL(req.url);
     const serviceId = searchParams.get('serviceId');
 
-    // Validate input
     if (!serviceId) {
       return NextResponse.json({ error: 'Service ID is required.' }, { status: 400 });
     }
 
-    // Get the "services" collection
     const servicesCollection = await getCollection('services');
     if (!servicesCollection) {
       return NextResponse.json({ error: 'Failed to connect to the database.' }, { status: 500 });
     }
 
-    // Delete the service
     const result = await servicesCollection.deleteOne({ _id: new ObjectId(serviceId) });
 
     if (result.deletedCount === 0) {

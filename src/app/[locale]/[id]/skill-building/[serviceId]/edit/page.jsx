@@ -17,7 +17,6 @@ export default function EditSkillBuildingCourse() {
   const router = useRouter();
   const params = useParams();
 
-
   const [formData, setFormData] = useState({
     name: '',
     duration: '',
@@ -32,7 +31,6 @@ export default function EditSkillBuildingCourse() {
 
   useEffect(() => {
     const fetchService = async () => {
-
       if (!user) {
         setError('User not logged in.');
         setLoading(false);
@@ -40,7 +38,6 @@ export default function EditSkillBuildingCourse() {
       }
       
       try {
-        console.log(`Fetching service with ID: ${params.serviceId}`); // Debugging information
         const response = await fetch(`/api/services/${user.id}/skill-building?serviceId=${params.serviceId}`);
         if (!response.ok) throw new Error('Failed to fetch service');
         const data = await response.json();
@@ -54,14 +51,13 @@ export default function EditSkillBuildingCourse() {
           imageUrl: service.imageUrl,
         });
       } catch (error) {
-        console.error('Error fetching service:', error.message);
         setError('Failed to fetch service data.');
       } finally {
         setLoading(false);
       }
     };
     fetchService();
-  }, [params.serviceId]);
+  }, [params.serviceId, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -84,8 +80,8 @@ export default function EditSkillBuildingCourse() {
       difficulty: formData.difficulty,
       duration: formData.duration,
       imageUrl: formData.imageUrl,
-      category: 'skill-building', // Use category extracted from the URL
-      sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
+      category: 'skill-building',
+      sellerId: session?.user?.id,
     };
 
     try {
@@ -97,14 +93,14 @@ export default function EditSkillBuildingCourse() {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const { error } = await response.json();
-        setError(error || 'Failed to update the item.');
+        setError(data.error || 'Failed to update the item.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/skill-building`); // Redirect to marketplace
+        router.push(`/${currentLocale}/${user.id}/skill-building`);
       }
     } catch (err) {
-      console.error('Error submitting form:', err.message);
       setError('An unexpected error occurred.');
     } finally {
       setLoading(false);
@@ -128,108 +124,108 @@ export default function EditSkillBuildingCourse() {
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('editSkillBuildingCourse')}</h2>
+        {/* Error display */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+            <p className="font-bold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('courseName')}</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="duration" className="block text-sm font-medium text-gray-700">{t('courseDuration')}</label>
-              <input
-                type="text"
-                id="duration"
-                name="duration"
-                required
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                value={formData.duration}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700">{t('courseDifficulty')}</label>
-              <input
-                type="text"
-                id="difficulty"
-                name="difficulty"
-                required
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                value={formData.difficulty}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">{t('coursePrice')}</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                required
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                value={formData.price}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('courseDescription')}</label>
-              <textarea
-                id="description"
-                name="description"
-                required
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                value={formData.description}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-                        <label htmlFor="image" className="block text-sm font-medium text-gray-700">{t('itemImage')}</label>
-                        {formData.imageUrl && (
-                          <div className="mb-4">
-                            <Image
-                              src={formData.imageUrl}
-                              width={400}
-                              height={300}
-                              className="w-full h-64 object-cover rounded-xl"
-                              alt="Current Image"
-                            />
-                          </div>
-                        )}
-                        <UploadButton
-                          endpoint="imageUploader"
-                          onClientUploadComplete={(res) => {
-                            console.log('Upload complete response:', res);
-                            if (!res) {
-                              console.log('No response received');
-                              return;
-                            }
-                            try {
-                              const fileUrl = res[0]?.url;
-                              console.log('File URL:', fileUrl);
-                              if (fileUrl) {
-                                setFormData(prev => ({
-                                  ...prev,
-                                  imageUrl: fileUrl
-                                }));
-                                console.log('Form data updated with URL:', fileUrl);
-                              } else {
-                                console.log('No file URL found in response');
-                              }
-                            } catch (err) {
-                              console.error('Error processing upload response:', err);
-                            }
-                          }}
-                          onUploadError={(error) => {
-                            alert(`Image upload failed: ${error.message}`);
-                          }}
-                        />
-                      </div>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('courseName')}</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="duration" className="block text-sm font-medium text-gray-700">{t('courseDuration')}</label>
+            <input
+              type="text"
+              id="duration"
+              name="duration"
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              value={formData.duration}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700">{t('courseDifficulty')}</label>
+            <input
+              type="text"
+              id="difficulty"
+              name="difficulty"
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              value={formData.difficulty}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">{t('coursePrice')}</label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              value={formData.price}
+              onChange={handleChange}
+            />
+            <span className="text-xs text-gray-500">Allowed range: 1 to 10,000</span>
+          </div>
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('courseDescription')}</label>
+            <textarea
+              id="description"
+              name="description"
+              required
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">{t('itemImage')}</label>
+            {formData.imageUrl && (
+              <div className="mb-4">
+                <Image
+                  src={formData.imageUrl}
+                  width={400}
+                  height={300}
+                  className="w-full h-64 object-cover rounded-xl"
+                  alt="Current Image"
+                />
+              </div>
+            )}
+            <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                if (!res) return;
+                try {
+                  const fileUrl = res[0]?.url;
+                  if (fileUrl) {
+                    setFormData(prev => ({
+                      ...prev,
+                      imageUrl: fileUrl
+                    }));
+                  }
+                } catch (err) {
+                  setError('Error processing upload response.');
+                }
+              }}
+              onUploadError={(error) => {
+                setError(`Image upload failed: ${error.message}`);
+              }}
+            />
+          </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

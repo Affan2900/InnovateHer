@@ -1,6 +1,20 @@
 import { NextResponse } from 'next/server';
 import { getCollection } from '@/lib/connect'; // Helper to connect to MongoDB
 import { ObjectId } from 'mongodb';
+import { z } from 'zod';
+
+// Zod schema for marketplace service
+const serviceSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  category: z.enum(["marketplace", "skill-building", "mentorship", "networking"]),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .min(1, { message: "Price is out of range. Allowed range is 1 to 10,000." })
+    .max(10000, { message: "Price is out of range. Allowed range is 1 to 10,000." }),
+  sellerId: z.string().min(1, "Seller ID is required"),
+  imageUrl: z.string().min(1, "Image URL is required"),
+});
 
 export async function GET(req) {
   try {
@@ -32,12 +46,22 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json(); // Parse the incoming request body
-    const { title, expertise, duration, description, price, category, sellerId, imageUrl } = body;
+    // Convert price to number if it comes as a string
+        if (typeof body.price === "string") body.price = Number(body.price);
 
-    // Validate input
-    if (!title || !expertise || !duration || !description || !imageUrl || !category || !price || !sellerId) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
-    }
+    // Use safeParse instead of parse to get a result object
+        const result = serviceSchema.safeParse(body);
+        if (!result.success) {
+          // Return the first validation error
+          return NextResponse.json(
+            { error: result.error.issues[0].message },
+            { status: 400 }
+          );
+        }
+
+    const { title, expertise, duration, description, price, category, sellerId, imageUrl } = result.data;
+
+
 
     // Get the "services" collection
     const servicesCollection = await getCollection('services');
@@ -60,8 +84,8 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.insertOne(newService);
-    if (!result.acknowledged) {
+    const insertResult = await servicesCollection.insertOne(newService);
+    if (!insertResult.acknowledged) {
       return NextResponse.json({ error: 'Failed to add service.' }, { status: 500 });
     }
 
@@ -75,12 +99,21 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const body = await req.json(); // Parse the incoming request body
+    
     const { id, title, expertise, duration, description, imageUrl, price, category, sellerId } = body;
 
-    // Validate input
-    if (!id || !title || !expertise || !duration || !imageUrl || !description || !category || !price || !sellerId) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
-    }
+    // Convert price to number if it comes as a string
+        if (typeof body.price === "string") body.price = Number(body.price);
+
+
+    // Validate input using Zod
+        const result = serviceSchema.safeParse(body);
+        if (!result.success) {
+          return NextResponse.json(
+            { error: result.error.errors[0].message },
+            { status: 400 }
+          );
+        }
 
     // Get the "services" collection
     const servicesCollection = await getCollection('services');
@@ -101,12 +134,12 @@ export async function PUT(req) {
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.updateOne(
+    const updateResult = await servicesCollection.updateOne(
       { _id: new ObjectId(id) }, // Match by ID
       { $set: updatedService }
     );
 
-    if (result.modifiedCount === 0) {
+    if (updateResult.modifiedCount === 0) {
       return NextResponse.json({ error: 'Failed to update service.' }, { status: 500 });
     }
 

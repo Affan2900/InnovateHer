@@ -10,7 +10,6 @@ import LanguageToggle from '@/components/LanguageToggle';
 import useLocaleStore from '@/lib/store/useLocaleStore';
 import { UploadButton } from "@/utils/uploadthing";
 
-
 export default function AddMarketplaceItem() {
   const t = useTranslations('addMarketplace');
   const { data: session } = useSession();
@@ -18,7 +17,7 @@ export default function AddMarketplaceItem() {
   const pathname = usePathname();
   const { currentLocale } = useLocaleStore();
   const user = session?.user;
-  const category = pathname.split('/')[3]; // Extract category from the URL
+  const category = pathname.split('/')[3];
 
   const [formData, setFormData] = useState({
     name: '',
@@ -42,19 +41,17 @@ export default function AddMarketplaceItem() {
     setLoading(true);
     setError(null);
 
-    const body = {
-      title: formData.name,
-      price: formData.price,
-      description: formData.description,
-      imageUrl: formData.imageUrl,
-      category, // Use category extracted from the URL
-      sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
-    };
-
-    console.log('Submitting form with data:', body);
-
     try {
-      const response = await fetch(`/api/services/${user.id}/marketplace`, {
+      const body = {
+        title: formData.name,
+        price: formData.price,
+        description: formData.description,
+        imageUrl: formData.imageUrl,
+        category,
+        sellerId: user?.id,
+      };
+
+      const response = await fetch(`/api/services/${user?.id}/marketplace`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,14 +59,16 @@ export default function AddMarketplaceItem() {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const { error } = await response.json();
-        setError(error || 'Failed to add the item.');
-      } else {
-        router.push(`/${currentLocale}/${user.id}/marketplace`); // Redirect to marketplace
+        setError(data.error || 'Failed to add service');
+        setLoading(false);
+        return;
       }
+
+      router.push(`/${currentLocale}/${user?.id}/marketplace`);
     } catch (err) {
-      console.error('Error submitting form:', err.message);
       setError('An unexpected error occurred.');
     } finally {
       setLoading(false);
@@ -84,8 +83,18 @@ export default function AddMarketplaceItem() {
       </div>
       <div className="min-h-screen mt-28 flex items-center justify-center bg-purple-50 p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('addMarketplaceItem')}</h2>
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+          <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">
+            {t('addMarketplaceItem')}
+          </h2>
+          
+          {/* Enhanced error display */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+              <p className="font-bold">Error</p>
+              <p>{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -95,7 +104,6 @@ export default function AddMarketplaceItem() {
                 type="text"
                 id="name"
                 name="name"
-                required
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 value={formData.name}
                 onChange={handleChange}
@@ -106,10 +114,9 @@ export default function AddMarketplaceItem() {
                 {t('itemPrice')}
               </label>
               <input
-                type="number"
+                type="text"
                 id="price"
                 name="price"
-                required
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 value={formData.price}
                 onChange={handleChange}
@@ -122,7 +129,6 @@ export default function AddMarketplaceItem() {
               <textarea
                 id="description"
                 name="description"
-                required
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 value={formData.description}
                 onChange={handleChange}
@@ -133,45 +139,19 @@ export default function AddMarketplaceItem() {
                 {t('itemImage')}
               </label>
               <UploadButton
-  endpoint="imageUploader"
-  onClientUploadComplete={(res) => {
-    // Log the complete response
-    console.log('Upload complete response:', res);
-    
-    // Check if we have a response at all
-    if (!res) {
-      console.log('No response received');
-      return;
-    }
-
-    // Try to access the file URL safely
-    try {
-      const fileUrl = res[0]?.url;  // Note: might be .url instead of .fileUrl
-      console.log('File URL:', fileUrl);
-      
-      if (fileUrl) {
-        setFormData(prev => ({
-          ...prev,
-          imageUrl: fileUrl
-        }));
-        console.log('Form data updated with URL:', fileUrl);
-      } else {
-        console.log('No file URL found in response');
-      }
-    } catch (err) {
-      console.error('Error processing upload response:', err);
-    }
-    
-    alert('Image uploaded successfully!');
-  }}
-  onUploadProgress={(progress) => {
-    console.log('Upload progress:', progress);
-  }}
-  onUploadError={(error) => {
-    console.error('Upload error:', error);
-    alert(`Image upload failed: ${error.message}`);
-  }}
-/>
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  if (res?.[0]?.url) {
+                    setFormData(prev => ({
+                      ...prev,
+                      imageUrl: res[0].url
+                    }));
+                  }
+                }}
+                onUploadError={(error) => {
+                  setError(`Image upload failed: ${error.message}`);
+                }}
+              />
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}

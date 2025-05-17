@@ -9,7 +9,12 @@ const ServiceSchema = new mongoose.Schema(
       enum: ["marketplace", "skill-building", "mentorship", "networking"],
       required: true,
     }, // Category of the service
-    price: { type: Number, required: true }, // Service price
+    price: { 
+      type: Number, 
+      required: true,
+      min: [1, 'Price must be at least 1'],
+      max: [10000, 'Price cannot exceed 10,000'],
+    },// Service price
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // The seller of the service
     customers: [
       {

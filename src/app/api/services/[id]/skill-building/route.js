@@ -2,6 +2,20 @@
 import { NextResponse } from 'next/server';
 import { getCollection } from '@/lib/connect'; // Helper to connect to MongoDB
 import { ObjectId } from 'mongodb';
+import { z } from 'zod';
+
+// Zod schema for marketplace service
+const serviceSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  category: z.enum(["marketplace", "skill-building", "mentorship", "networking"]),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .min(1, { message: "Price is out of range. Allowed range is 1 to 10,000." })
+    .max(10000, { message: "Price is out of range. Allowed range is 1 to 10,000." }),
+  sellerId: z.string().min(1, "Seller ID is required"),
+  imageUrl: z.string().min(1, "Image URL is required"),
+});
 
 export async function GET(req) {
   try {
@@ -35,10 +49,18 @@ export async function POST(req) {
     const body = await req.json(); // Parse the incoming request body
     const { title, description, duration,category, imageUrl, difficulty, price, sellerId } = body;
 
-    // Validate input
-    if (!title || !description || !duration || !imageUrl || !difficulty || !price || !sellerId) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
-    }
+    // Convert price to number if it comes as a string
+            if (typeof body.price === "string") body.price = Number(body.price);
+        
+            // Use safeParse instead of parse to get a result object
+            const result = serviceSchema.safeParse(body);
+            if (!result.success) {
+              // Return the first validation error
+              return NextResponse.json(
+                { error: result.error.issues[0].message },
+                { status: 400 }
+              );
+            }
 
     // Get the "courses" collection
     const servicesCollection = await getCollection('services');
@@ -61,8 +83,8 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.insertOne(newCourse);
-    if (!result.acknowledged) {
+    const insertResult = await servicesCollection.insertOne(newCourse);
+    if (!insertResult.acknowledged) {
       return NextResponse.json({ error: 'Failed to add course.' }, { status: 500 });
     }
 
@@ -78,10 +100,18 @@ export async function PUT(req) {
     const body = await req.json(); // Parse the incoming request body
     const { id, title, description,duration, difficulty, imageUrl, category, price, sellerId } = body;
 
-    // Validate input
-    if (!id || !title || !description || !duration || !imageUrl || !difficulty || !category || !price || !sellerId) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
-    }
+    // Convert price to number if it comes as a string
+            if (typeof body.price === "string") body.price = Number(body.price);
+        
+            // Use safeParse instead of parse to get a result object
+            const result = serviceSchema.safeParse(body);
+            if (!result.success) {
+              // Return the first validation error
+              return NextResponse.json(
+                { error: result.error.issues[0].message },
+                { status: 400 }
+              );
+            }
 
     // Get the "services" collection
     const servicesCollection = await getCollection('services');
@@ -101,12 +131,12 @@ export async function PUT(req) {
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.updateOne(
+    const updateResult = await servicesCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: updatedService }
     );
 
-    if (result.modifiedCount === 0) {
+    if (updateResult.modifiedCount === 0) {
       return NextResponse.json({ error: 'Failed to update service.' }, { status: 500 });
     }
 

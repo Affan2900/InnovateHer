@@ -1,6 +1,20 @@
 import { NextResponse } from 'next/server';
 import { getCollection } from '@/lib/connect';
 import { ObjectId } from 'mongodb';
+import { z } from 'zod';
+
+// Zod schema for marketplace service
+const serviceSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  category: z.enum(["marketplace", "skill-building", "mentorship", "networking"]),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .min(1, { message: "Price is out of range. Allowed range is 1 to 10,000." })
+    .max(10000, { message: "Price is out of range. Allowed range is 1 to 10,000." }),
+  sellerId: z.string().min(1, "Seller ID is required"),
+  imageUrl: z.string().min(1, "Image URL is required"),
+});
 
 
 export async function GET(req) {
@@ -37,10 +51,18 @@ export async function POST(req) {
     const body = await req.json();
     const { title, description, imageUrl, category, price, sellerId, date, location } = body;
 
-    // Validate input
-    if (!title || !description || !imageUrl || !category || !price || !sellerId || !date || !location) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
-    }
+    // Convert price to number if it comes as a string
+        if (typeof body.price === "string") body.price = Number(body.price);
+    
+        // Use safeParse instead of parse to get a result object
+        const result = serviceSchema.safeParse(body);
+        if (!result.success) {
+          // Return the first validation error
+          return NextResponse.json(
+            { error: result.error.issues[0].message },
+            { status: 400 }
+          );
+        }
 
     // Validate date is greater than or equal to current date
     const chosenDate = new Date(date);
@@ -74,8 +96,8 @@ export async function POST(req) {
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.insertOne(newEvent);
-    if (!result.acknowledged) {
+    const insertResult = await servicesCollection.insertOne(newEvent);
+    if (!insertResult.acknowledged) {
       return NextResponse.json({ error: 'Failed to add service.' }, { status: 500 });
     }
 
@@ -94,10 +116,18 @@ export async function PUT(req) {
     const body = await req.json(); // Parse the incoming request body
     const { id, title, location,description, price, category, date, sellerId } = body;
 
-    // Validate input
-    if (!id || !title || !date || !description || !category || !price || !sellerId || !location) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 });
-    }
+    // Convert price to number if it comes as a string
+        if (typeof body.price === "string") body.price = Number(body.price);
+    
+        // Use safeParse instead of parse to get a result object
+        const result = serviceSchema.safeParse(body);
+        if (!result.success) {
+          // Return the first validation error
+          return NextResponse.json(
+            { error: result.error.issues[0].message },
+            { status: 400 }
+          );
+        }
 
     // Check if the chosen date is equal to or greater than the current date
     const chosenDate = new Date(date);
@@ -125,12 +155,12 @@ export async function PUT(req) {
       updatedAt: new Date(),
     };
 
-    const result = await servicesCollection.updateOne(
+    const updateResult = await servicesCollection.updateOne(
       { _id: new ObjectId(id) }, // Match by ID
       { $set: updatedService }
     );
 
-    if (result.modifiedCount === 0) {
+    if (updateResult.modifiedCount === 0) {
       return NextResponse.json({ error: 'Failed to update service.' }, { status: 500 });
     }
 

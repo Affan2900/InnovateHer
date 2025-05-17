@@ -1,4 +1,3 @@
-// filepath: /D:/Semester 5/Web Engineering/innovateher/src/app/[locale]/[id]/skill-building/add/page.jsx
 'use client';
 
 import { useState } from 'react';
@@ -64,14 +63,14 @@ export default function AddSkillBuildingCourse() {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const { error } = await response.json();
-        setError(error || 'Failed to add the course.');
+        setError(data.error || 'Failed to add the course.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/skill-building`); // Redirect to skill-building
+        router.push(`/${currentLocale}/${user.id}/skill-building`);
       }
     } catch (err) {
-      console.error('Error submitting form:', err.message);
       setError('An unexpected error occurred.');
     } finally {
       setLoading(false);
@@ -87,7 +86,13 @@ export default function AddSkillBuildingCourse() {
       <div className="min-h-screen flex mt-14 items-center justify-center bg-purple-50 p-4">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
           <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('addSkillBuildingCourse')}</h2>
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+          {/* Error display */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+              <p className="font-bold">Error</p>
+              <p>{error}</p>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('courseName')}</label>
@@ -136,6 +141,7 @@ export default function AddSkillBuildingCourse() {
                 value={formData.price}
                 onChange={handleChange}
               />
+              <span className="text-xs text-gray-500">Allowed range: 1 to 10,000</span>
             </div>
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('courseDescription')}</label>
@@ -149,50 +155,31 @@ export default function AddSkillBuildingCourse() {
               />
             </div>
             <div>
-                          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                            {t('itemImage')}
-                          </label>
-                          <UploadButton
-              endpoint="imageUploader"
-              onClientUploadComplete={(res) => {
-                // Log the complete response
-                console.log('Upload complete response:', res);
-                
-                // Check if we have a response at all
-                if (!res) {
-                  console.log('No response received');
-                  return;
-                }
-            
-                // Try to access the file URL safely
-                try {
-                  const fileUrl = res[0]?.url;  // Note: might be .url instead of .fileUrl
-                  console.log('File URL:', fileUrl);
-                  
-                  if (fileUrl) {
-                    setFormData(prev => ({
-                      ...prev,
-                      imageUrl: fileUrl
-                    }));
-                    console.log('Form data updated with URL:', fileUrl);
-                  } else {
-                    console.log('No file URL found in response');
+              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                {t('itemImage')}
+              </label>
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  if (!res) return;
+                  try {
+                    const fileUrl = res[0]?.url;
+                    if (fileUrl) {
+                      setFormData(prev => ({
+                        ...prev,
+                        imageUrl: fileUrl
+                      }));
+                    }
+                  } catch (err) {
+                    setError('Error processing upload response.');
                   }
-                } catch (err) {
-                  console.error('Error processing upload response:', err);
-                }
-                
-                alert('Image uploaded successfully!');
-              }}
-              onUploadProgress={(progress) => {
-                console.log('Upload progress:', progress);
-              }}
-              onUploadError={(error) => {
-                console.error('Upload error:', error);
-                alert(`Image upload failed: ${error.message}`);
-              }}
-            />
-                        </div>
+                  alert('Image uploaded successfully!');
+                }}
+                onUploadError={(error) => {
+                  setError(`Image upload failed: ${error.message}`);
+                }}
+              />
+            </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

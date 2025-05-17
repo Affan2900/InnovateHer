@@ -1,18 +1,17 @@
-// filepath: /D:/Semester 5/Web Engineering/innovateher/src/app/[locale]/[id]/networking/[serviceId]/edit/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useRouter, useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react'; // Import NextAuth for session handling
+import { useSession } from 'next-auth/react';
 import useLocaleStore from '@/lib/store/useLocaleStore';
 import { UploadButton } from "@/utils/uploadthing";
 import Image from 'next/image';
 
 export default function EditNetworkingEvent() {
   const t = useTranslations("editNetworking");
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { currentLocale } = useLocaleStore();
   const user = session?.user;
   const router = useRouter();
@@ -39,7 +38,6 @@ export default function EditNetworkingEvent() {
       }
 
       try {
-        console.log(`Fetching service with ID: ${params.serviceId}`); // Debugging information
         const response = await fetch(`/api/services/${user.id}/networking?serviceId=${params.serviceId}`);
         if (!response.ok) throw new Error('Failed to fetch service');
         const data = await response.json();
@@ -56,7 +54,6 @@ export default function EditNetworkingEvent() {
           description: service.description,
         });
       } catch (error) {
-        console.error('Error fetching service:', error.message);
         setError('Failed to fetch service data.');
       } finally {
         setLoading(false);
@@ -87,8 +84,8 @@ export default function EditNetworkingEvent() {
       price: formData.price,
       imageUrl: formData.imageUrl,
       description: formData.description,
-      category: 'networking', // Use category extracted from the URL
-      sellerId: session?.user?.id, // Ensure seller ID comes from authenticated user
+      category: 'networking',
+      sellerId: session?.user?.id,
     };
 
     try {
@@ -100,14 +97,14 @@ export default function EditNetworkingEvent() {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const { error } = await response.json();
-        setError(error || 'Failed to update the item.');
+        setError(data.error || 'Failed to update the item.');
       } else {
-        router.push(`/${currentLocale}/${user.id}/networking`); // Redirect to networking
+        router.push(`/${currentLocale}/${user.id}/networking`);
       }
     } catch (err) {
-      console.error('Error submitting form:', err.message);
       setError('An unexpected error occurred.');
     } finally {
       setLoading(false);
@@ -131,7 +128,13 @@ export default function EditNetworkingEvent() {
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-purple-700">{t('editNetworkingEvent')}</h2>
-        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+        {/* Error display */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+            <p className="font-bold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('eventName')}</label>
@@ -180,6 +183,7 @@ export default function EditNetworkingEvent() {
               value={formData.price}
               onChange={handleChange}
             />
+            <span className="text-xs text-gray-500">Allowed range: 1 to 10,000</span>
           </div>
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('eventDescription')}</label>
@@ -193,47 +197,39 @@ export default function EditNetworkingEvent() {
             ></textarea>
           </div>
           <div>
-                      <label htmlFor="image" className="block text-sm font-medium text-gray-700">{t('itemImage')}</label>
-                      {formData.imageUrl && (
-                        <div className="mb-4">
-                          <Image
-                            src={formData.imageUrl}
-                            width={400}
-                            height={300}
-                            className="w-full h-64 object-cover rounded-xl"
-                            alt="Current Image"
-                          />
-                        </div>
-                      )}
-                      <UploadButton
-                        endpoint="imageUploader"
-                        onClientUploadComplete={(res) => {
-                          console.log('Upload complete response:', res);
-                          if (!res) {
-                            console.log('No response received');
-                            return;
-                          }
-                          try {
-                            const fileUrl = res[0]?.url;
-                            console.log('File URL:', fileUrl);
-                            if (fileUrl) {
-                              setFormData(prev => ({
-                                ...prev,
-                                imageUrl: fileUrl
-                              }));
-                              console.log('Form data updated with URL:', fileUrl);
-                            } else {
-                              console.log('No file URL found in response');
-                            }
-                          } catch (err) {
-                            console.error('Error processing upload response:', err);
-                          }
-                        }}
-                        onUploadError={(error) => {
-                          alert(`Image upload failed: ${error.message}`);
-                        }}
-                      />
-                    </div>
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">{t('itemImage')}</label>
+            {formData.imageUrl && (
+              <div className="mb-4">
+                <Image
+                  src={formData.imageUrl}
+                  width={400}
+                  height={300}
+                  className="w-full h-64 object-cover rounded-xl"
+                  alt="Current Image"
+                />
+              </div>
+            )}
+            <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                if (!res) return;
+                try {
+                  const fileUrl = res[0]?.url;
+                  if (fileUrl) {
+                    setFormData(prev => ({
+                      ...prev,
+                      imageUrl: fileUrl
+                    }));
+                  }
+                } catch (err) {
+                  setError('Error processing upload response.');
+                }
+              }}
+              onUploadError={(error) => {
+                setError(`Image upload failed: ${error.message}`);
+              }}
+            />
+          </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
